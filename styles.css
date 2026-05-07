@@ -500,8 +500,7 @@ figcaption {
     padding: 0;
   }
 
-  .mobile-menu-button span,
-  .filter-close span {
+  .mobile-menu-button span {
     display: block;
     width: 32px;
     height: 4px;
@@ -576,7 +575,6 @@ figcaption {
     align-items: stretch;
   }
 
-  .mobile-nav-row .filter-close,
   .mobile-nav-row .mobile-filter-button {
     grid-column: 2;
     grid-row: 1;
@@ -599,20 +597,6 @@ figcaption {
   .mobile-nav .nav-pill:hover {
     background: var(--ink);
     color: var(--paper);
-  }
-
-  .filter-close {
-    display: grid;
-    place-items: center;
-    align-self: stretch;
-    gap: 5px;
-    width: 40px;
-    height: 100%;
-    min-height: 40px;
-    padding: 0;
-    border: 2px solid var(--ink);
-    border-radius: 8px;
-    background: var(--paper);
   }
 
   .site-main {
