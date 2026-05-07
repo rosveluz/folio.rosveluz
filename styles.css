@@ -131,8 +131,8 @@ img {
 }
 
 .filter-button img {
-  max-width: 28px;
-  max-height: 28px;
+  max-width: 24px;
+  max-height: 24px;
 }
 
 .filter-button:hover,
@@ -208,6 +208,7 @@ img {
   background: var(--paper);
   color: var(--ink);
   font: inherit;
+  font-size: 0.875rem;
 }
 
 .control-reset {
@@ -541,8 +542,8 @@ figcaption {
   }
 
   .mobile-nav .filter-button img {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
   }
 
@@ -634,6 +635,17 @@ figcaption {
     grid-template-columns: 1fr;
     gap: 12px;
     padding: 0 0 24px;
+  }
+
+  .control-field label {
+    font-size: 0.75rem;
+  }
+
+  .control-field select,
+  .control-field input,
+  .control-reset,
+  .control-close {
+    font-size: 1rem;
   }
 
   .work-card {
