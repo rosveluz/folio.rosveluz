@@ -2,6 +2,7 @@ import { projects } from "./data/projects.js";
 
 const app = document.querySelector("#app");
 const header = document.querySelector("[data-header]");
+const brand = document.querySelector(".brand");
 const filterButtons = [...document.querySelectorAll("[data-filter]")];
 const filterToggles = [...document.querySelectorAll("[data-filter-toggle]")];
 const menuToggles = [...document.querySelectorAll("[data-menu-toggle]")];
@@ -334,6 +335,12 @@ filterButtons.forEach((button) => {
     }
     closeMobileMenu();
   });
+});
+
+brand?.addEventListener("click", (event) => {
+  event.preventDefault();
+  renderHome("All");
+  syncHash("#home");
 });
 
 menuToggles.forEach((button) => {
