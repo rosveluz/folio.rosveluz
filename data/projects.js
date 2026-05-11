@@ -110,6 +110,33 @@ export const projects = [
     ],
   },
   {
+    id: "editorial-layout-series",
+    title: "Work Title",
+    detail: "Detail",
+    category: "Desktop Publishing",
+    date: "2025-07-18",
+    description:
+      "A desktop publishing placeholder for editorial layouts, reports, presentation sheets, and print-ready collateral with clear structure and polished type hierarchy.",
+    cover: placeholder("Publishing Cover", 215),
+    images: [
+      {
+        desktopSrc: placeholder("Publishing Image 01", 215),
+        mobileSrc: mobilePlaceholder("Publishing Mobile 01", 215),
+        caption: "Image Caption",
+      },
+      {
+        desktopSrc: placeholder("Publishing Image 02", 210),
+        mobileSrc: mobilePlaceholder("Publishing Mobile 02", 210),
+        caption: "Image Caption",
+      },
+      {
+        desktopSrc: placeholder("Publishing Image 03", 205),
+        mobileSrc: mobilePlaceholder("Publishing Mobile 03", 205),
+        caption: "Image Caption",
+      },
+    ],
+  },
+  {
     id: "product-landing",
     title: "Work Title",
     detail: "Detail",

@@ -152,9 +152,12 @@ function setupHomeControls() {
     renderHome();
   });
 
-  app.querySelector("[data-project-search]")?.addEventListener("change", (event) => {
+  app.querySelector("[data-project-search]")?.addEventListener("input", (event) => {
     projectControls.query = event.target.value;
     renderHome();
+    const search = app.querySelector("[data-project-search]");
+    search?.focus();
+    search?.setSelectionRange(search.value.length, search.value.length);
   });
 
   app.querySelector("[data-reset-controls]")?.addEventListener("click", () => {
@@ -174,8 +177,13 @@ function renderContact() {
   app.className = "site-main contact-view";
   app.innerHTML = `
     <section class="contact-panel">
-      <p>Contact page placeholder</p>
-      <a href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
+      <p class="contact-kicker">Project inquiries, collaborations, and design work</p>
+      <h1>Let's build something clean, useful, and quietly memorable.</h1>
+      <a class="contact-email" href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
+      <div class="contact-links" aria-label="Related links">
+        <a href="https://www.rosveluz.com/">www.rosveluz.com</a>
+        <a href="https://art.rosveluz.com/" target="_blank" rel="noopener noreferrer">art.rosveluz.com</a>
+      </div>
     </section>
   `;
 }
