@@ -1,4 +1,4 @@
-# Rosveluz Portfolio
+# Ros Veluz' Portfolio
 
 A static portfolio site for Rosveluz, built with plain HTML, CSS, and JavaScript. The site is intended to run on GitHub Pages and can be previewed locally with VS Code Live Server.
 
