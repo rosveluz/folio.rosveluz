@@ -119,7 +119,7 @@ function renderHome(filter = currentFilter) {
           (project) => `
             <article class="work-card">
               <button class="work-card-button" type="button" data-project-id="${project.id}">
-                <img src="${project.cover}" alt="" loading="lazy" />
+                <img src="${project.cover}" alt="" loading="lazy" ${project.coverBackground ? `class="is-contained" style="--media-background: ${project.coverBackground}"` : ""} />
                 <span class="work-title">${project.title}</span>
                 <span class="work-detail">${project.detail}</span>
               </button>
@@ -204,6 +204,13 @@ function projectDescription(project) {
   `;
 }
 
+function projectImage(image, mobile = false) {
+  const styles = [];
+  if (image.background) styles.push(`--media-background: ${image.background}`);
+  if (image.aspectRatio) styles.push(`--media-aspect: ${image.aspectRatio}`);
+  return `<img src="${mobile ? image.mobileSrc || image.desktopSrc : image.desktopSrc}" alt="" loading="lazy" class="${image.fit === "contain" ? "is-contained" : ""}" style="${styles.join("; ")}" />`;
+}
+
 function openProject(projectId, updateHash = true) {
   const project = byId(projectId) || projects[0];
   activeProject = project;
@@ -236,7 +243,7 @@ function openProject(projectId, updateHash = true) {
             .map(
               (image, index) => `
                 <figure class="project-figure" id="project-image-${index}" data-image-index="${index}">
-                  <img src="${image.desktopSrc}" alt="" loading="lazy" />
+                  ${projectImage(image)}
                   <figcaption>${image.caption}</figcaption>
                 </figure>
               `
@@ -248,7 +255,7 @@ function openProject(projectId, updateHash = true) {
             .map(
               (image, index) => `
                 <figure class="carousel-slide" data-slide-index="${index}">
-                  <img src="${image.mobileSrc || image.desktopSrc}" alt="" loading="lazy" />
+                  ${projectImage(image, true)}
                   <figcaption>${image.caption}</figcaption>
                 </figure>
               `

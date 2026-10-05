@@ -343,6 +343,22 @@ img {
   background: var(--soft);
 }
 
+.work-card img.is-contained,
+.project-figure img.is-contained,
+.carousel-slide img.is-contained {
+  object-fit: contain;
+  object-position: center;
+  background: var(--media-background, var(--paper));
+}
+
+.project-figure img.is-contained {
+  aspect-ratio: var(--media-aspect, 16 / 9);
+}
+
+.carousel-slide img.is-contained {
+  aspect-ratio: var(--media-aspect, 3 / 4);
+}
+
 figcaption {
   padding: 18px 8px 0;
   font-size: 0.8rem;
