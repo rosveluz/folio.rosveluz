@@ -9,6 +9,9 @@ const menuToggles = [...document.querySelectorAll("[data-menu-toggle]")];
 const mobileNav = document.querySelector("[data-mobile-nav]");
 
 let currentFilter = "All";
+const projectsPerPage = 12;
+let currentPage = 1;
+let paginationCriteria = "";
 let isFilterPanelOpen = false;
 let projectControls = {
   sort: "newest",
@@ -125,6 +128,9 @@ function filterPanel() {
 }
 
 function renderHome(filter = currentFilter) {
+  const criteria = JSON.stringify([filter, projectControls]);
+  if (criteria !== paginationCriteria) currentPage = 1;
+  paginationCriteria = criteria;
   activeProject = null;
   setActiveFilter(filter);
   closeMobileMenu();
@@ -134,12 +140,15 @@ function renderHome(filter = currentFilter) {
   const visibleProjects = sortProjects(
     projects.filter((project) => (filter === "All" || project.category === filter) && projectMatchesControls(project))
   );
+  const pageCount = Math.ceil(visibleProjects.length / projectsPerPage);
+  currentPage = Math.min(currentPage, Math.max(1, pageCount));
+  const pageProjects = visibleProjects.slice((currentPage - 1) * projectsPerPage, currentPage * projectsPerPage);
 
   app.className = "site-main home-view";
   app.innerHTML = `
     ${filterPanel()}
-    <section class="work-grid" aria-label="Portfolio work">
-      ${visibleProjects
+    <section class="work-grid ${pageCount > 1 ? "is-paginated" : ""}" aria-label="Portfolio work" tabindex="-1">
+      ${pageProjects
         .map(
           (project) => `
             <article class="work-card">
@@ -162,9 +171,32 @@ function renderHome(filter = currentFilter) {
         )
         .join("") || `<p class="empty-state">No projects match the current filters.</p>`}
     </section>
+    ${pageCount > 1 ? `
+      <nav class="work-pagination" aria-label="Portfolio pages">
+        <button type="button" data-page="${currentPage - 1}" aria-label="Previous page" title="Previous page" ${currentPage === 1 ? "disabled" : ""}>
+          <img class="pagination-arrow is-previous" src="img/Down%20Arrow.svg" alt="" />
+        </button>
+        ${Array.from({ length: pageCount }, (_, index) => {
+          const page = index + 1;
+          return `<button type="button" data-page="${page}" aria-label="Page ${page}" ${page === currentPage ? 'aria-current="page"' : ""}>${page}</button>`;
+        }).join("")}
+        <button type="button" data-page="${currentPage + 1}" aria-label="Next page" title="Next page" ${currentPage === pageCount ? "disabled" : ""}>
+          <img class="pagination-arrow is-next" src="img/Down%20Arrow.svg" alt="" />
+        </button>
+      </nav>
+    ` : ""}
   `;
 
   setupHomeControls();
+  app.querySelectorAll("[data-page]").forEach((button) => {
+    button.addEventListener("click", () => {
+      currentPage = Number(button.dataset.page);
+      renderHome();
+      const grid = app.querySelector(".work-grid");
+      grid?.focus({ preventScroll: true });
+      grid?.scrollIntoView({ block: "start" });
+    });
+  });
 
   app.querySelectorAll("[data-project-id]").forEach((button) => {
     button.addEventListener("click", () => openProject(button.dataset.projectId));

@@ -168,6 +168,57 @@ video {
   padding: 30px 0 150px;
 }
 
+.work-grid.is-paginated {
+  padding-bottom: 48px;
+}
+
+.work-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 0 80px;
+}
+
+.work-pagination button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.work-pagination button[aria-current="page"] {
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.work-pagination button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.work-pagination button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.pagination-arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.pagination-arrow.is-previous {
+  transform: rotate(90deg);
+}
+
+.pagination-arrow.is-next {
+  transform: rotate(-90deg);
+}
+
 .folio-controls {
   display: none;
   grid-template-columns: 160px 160px 160px minmax(220px, 1fr) auto;
