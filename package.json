@@ -1,0 +1,13 @@
+{
+  "name": "rosveluz-portfolio",
+  "private": true,
+  "scripts": {
+    "build:blog": "node scripts/build-blog.mjs",
+    "preview:blog": "node scripts/preview-blog.mjs",
+    "test:blog": "node --test scripts/blog.test.mjs"
+  },
+  "devDependencies": {
+    "marked": "^15.0.12",
+    "yaml": "^2.8.1"
+  }
+}

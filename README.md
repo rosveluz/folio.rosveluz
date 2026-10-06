@@ -8,6 +8,9 @@ A static portfolio site for Rosveluz, built with plain HTML, CSS, and JavaScript
 - `styles.css` - Site layout, responsive styling, and component styles
 - `script.js` - Portfolio routing, category filtering, sorting, and project detail interactions
 - `data/projects.js` - Portfolio project data
+- `about/` and `about.css` - About page and its layout
+- `content/blog/` - Markdown articles
+- `blog/` - Generated public blog pages
 - `img/` - Logo, icon, and image assets
 
 ## Editing Portfolio Items
@@ -45,3 +48,20 @@ Open the folder in VS Code and use the Live Server extension to preview the site
 ## GitHub Pages
 
 This project is ready for GitHub Pages as a static site. In the repository settings, set GitHub Pages to serve from the branch and folder that contain `index.html`.
+
+## Blog
+
+See [BLOG-GUIDE.md](BLOG-GUIDE.md) for local previews, Markdown articles, and the publishing command. Run `npm run preview:blog` to preview articles and drafts locally, or `npm run build:blog` to generate published articles only.
+
+## Publish Updates
+
+Before committing changes to blog content or templates, run:
+
+```powershell
+npm run build:blog
+npm run test:blog
+```
+
+Commit the page, style, script, article source, image, and configuration changes, including the generated `blog/` pages and `data/blog-status.json`. Then push through the existing GitHub Pages workflow. The build command does not deploy the site.
+
+The About page is at `/about/` and the blog index is at `/blog/`. Preview the public output with `npm run preview:blog -- --public`. Local preview output and dependencies are excluded from Git; draft Markdown and build tools are excluded from the Pages site by `_config.yml`.

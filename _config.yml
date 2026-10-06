@@ -1,0 +1,8 @@
+# GitHub Pages serves generated blog HTML, not draft Markdown or build tools.
+exclude:
+  - content
+  - scripts
+  - node_modules
+  - BLOG-GUIDE.md
+  - package.json
+  - package-lock.json

@@ -1,5 +1,18 @@
 import { projects } from "./data/projects.js";
 
+fetch("./data/blog-status.json")
+  .then((response) => response.ok ? response.json() : null)
+  .then((status) => {
+    if (!status?.published) return;
+    const placeholder = document.querySelector("[data-blog-link]");
+    if (!placeholder) return;
+    const link = document.createElement("a");
+    link.href = "/blog/";
+    link.textContent = "Blog";
+    placeholder.replaceWith(link);
+  })
+  .catch(() => {});
+
 const app = document.querySelector("#app");
 const header = document.querySelector("[data-header]");
 const brand = document.querySelector(".brand");
