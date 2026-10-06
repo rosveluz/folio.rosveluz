@@ -40,7 +40,8 @@ button {
   cursor: pointer;
 }
 
-img {
+img,
+video {
   display: block;
   width: 100%;
 }
@@ -254,7 +255,8 @@ img {
   opacity: 0.78;
 }
 
-.work-card img {
+.work-card img,
+.work-card video {
   aspect-ratio: 300 / 170;
   border-radius: 6px;
   object-fit: cover;
@@ -314,7 +316,8 @@ img {
   opacity: 1;
 }
 
-.thumb-button img {
+.thumb-button img,
+.thumb-button video {
   aspect-ratio: 1;
   object-fit: cover;
   background: var(--soft);
@@ -336,7 +339,8 @@ img {
   margin: 0;
 }
 
-.project-figure img {
+.project-figure img,
+.project-figure video {
   aspect-ratio: 16 / 9;
   border-radius: 6px;
   object-fit: cover;
@@ -344,18 +348,23 @@ img {
 }
 
 .work-card img.is-contained,
+.work-card video.is-contained,
 .project-figure img.is-contained,
-.carousel-slide img.is-contained {
+.project-figure video.is-contained,
+.carousel-slide img.is-contained,
+.carousel-slide video.is-contained {
   object-fit: contain;
   object-position: center;
   background: var(--media-background, var(--paper));
 }
 
-.project-figure img.is-contained {
+.project-figure img.is-contained,
+.project-figure video.is-contained {
   aspect-ratio: var(--media-aspect, 16 / 9);
 }
 
-.carousel-slide img.is-contained {
+.carousel-slide img.is-contained,
+.carousel-slide video.is-contained {
   aspect-ratio: var(--media-aspect, 3 / 4);
 }
 
@@ -705,7 +714,8 @@ figcaption {
     width: 100%;
   }
 
-  .work-card img {
+  .work-card img,
+  .work-card video {
     aspect-ratio: 1.35;
   }
 
@@ -845,7 +855,8 @@ figcaption {
     scroll-snap-align: start;
   }
 
-  .carousel-slide img {
+  .carousel-slide img,
+  .carousel-slide video {
     aspect-ratio: auto;
     height: auto;
     border-radius: 8px;

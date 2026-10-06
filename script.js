@@ -68,6 +68,31 @@ function sortProjects(projectList) {
   });
 }
 
+function mediaStyles(item) {
+  const styles = [];
+  if (item.background) styles.push(`--media-background: ${item.background}`);
+  if (item.aspectRatio) styles.push(`--media-aspect: ${item.aspectRatio}`);
+  if (item.coverPosition) styles.push(`object-position: ${item.coverPosition}`);
+  return styles.join("; ");
+}
+
+function mediaClass(item) {
+  return item.fit === "contain" ? "is-contained" : "";
+}
+
+function renderMedia(item, mobile = false, context = "project") {
+  const src = mobile ? item.mobileSrc || item.desktopSrc : item.desktopSrc;
+  const className = mediaClass(item);
+  const style = mediaStyles(item);
+
+  if (item.type === "video") {
+    const controls = context === "project" ? "controls" : "";
+    return `<video src="${src}" ${controls} muted playsinline preload="metadata" class="${className}" style="${style}"></video>`;
+  }
+
+  return `<img src="${src}" alt="" loading="lazy" class="${className}" style="${style}" />`;
+}
+
 function filterPanel() {
   return `
     <section class="folio-controls ${isFilterPanelOpen ? "is-open" : ""}" aria-label="Sorting and filters" data-filter-panel>
@@ -119,7 +144,16 @@ function renderHome(filter = currentFilter) {
           (project) => `
             <article class="work-card">
               <button class="work-card-button" type="button" data-project-id="${project.id}">
-                <img src="${project.cover}" alt="" loading="lazy" ${project.coverBackground ? `class="is-contained" style="--media-background: ${project.coverBackground}"` : ""} />
+                ${renderMedia(
+                  {
+                    desktopSrc: project.cover,
+                    fit: project.coverBackground ? "contain" : project.coverFit,
+                    background: project.coverBackground,
+                    coverPosition: project.coverPosition,
+                  },
+                  false,
+                  "cover"
+                )}
                 <span class="work-title">${project.title}</span>
                 <span class="work-detail">${project.detail}</span>
               </button>
@@ -205,10 +239,7 @@ function projectDescription(project) {
 }
 
 function projectImage(image, mobile = false) {
-  const styles = [];
-  if (image.background) styles.push(`--media-background: ${image.background}`);
-  if (image.aspectRatio) styles.push(`--media-aspect: ${image.aspectRatio}`);
-  return `<img src="${mobile ? image.mobileSrc || image.desktopSrc : image.desktopSrc}" alt="" loading="lazy" class="${image.fit === "contain" ? "is-contained" : ""}" style="${styles.join("; ")}" />`;
+  return renderMedia(image, mobile, "project");
 }
 
 function openProject(projectId, updateHash = true) {
@@ -229,7 +260,7 @@ function openProject(projectId, updateHash = true) {
           .map(
             (image, index) => `
               <button class="thumb-button ${index === 0 ? "is-active" : ""}" type="button" data-thumb="${index}">
-                <img src="${image.mobileSrc || image.desktopSrc}" alt="" loading="lazy" />
+                ${renderMedia(image, true, "thumbnail")}
               </button>
             `
           )
