@@ -1,7 +1,40 @@
 const services = new Set(['Web design', 'UI/UX design', 'App Prototyping', 'Logo and visual identity', 'Graphic design', 'Desktop publishing', 'Other']);
 
+async function notifyEnquiry(env, lead) {
+  if (!env.BREVO_API_KEY) {
+    console.warn('Enquiry notification skipped', { leadId: lead.id, reason: 'missing_api_key' });
+    return;
+  }
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'api-key': env.BREVO_API_KEY },
+      body: JSON.stringify({
+        sender: { name: 'Ros Veluz Portfolio', email: 'hello@rosveluz.com' },
+        to: [{ name: 'Ros Veluz', email: 'hello@rosveluz.com' }],
+        replyTo: { email: lead.email },
+        subject: `Portfolio enquiry: ${lead.service}`,
+        textContent: [
+          'New portfolio enquiry', '', `Reference: ${lead.id}`,
+          `Name: ${lead.name}`, `Email: ${lead.email}`,
+          `Company: ${lead.company || 'Not provided'}`, `Country: ${lead.country}`,
+          `Service: ${lead.service}`, '', 'Project details:', lead.message,
+        ].join('\n'),
+      }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) {
+      console.error('Enquiry notification rejected', { leadId: lead.id, status: response.status });
+      return;
+    }
+    console.info('Enquiry notification accepted by Brevo', { leadId: lead.id });
+  } catch {
+    console.error('Enquiry notification unavailable', { leadId: lead.id });
+  }
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin');
     const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Vary': 'Origin' };
     if (origin === env.ALLOWED_ORIGIN) {
@@ -52,8 +85,13 @@ export default {
       }
       const campaign = payload.campaign && typeof payload.campaign === 'object' ? payload.campaign : {};
       const metadata = (key) => typeof campaign[key] === 'string' ? campaign[key].slice(0, 200) : '';
+      const id = crypto.randomUUID();
       await env.DB.prepare(`INSERT INTO leads (id, name, email, company, country, service, message, utm_source, utm_medium, utm_campaign, utm_content, utm_term, landing_page) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-        .bind(crypto.randomUUID(), name, email, company, country, service, message, ...['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'landing_page'].map(metadata)).run();
+        .bind(id, name, email, company, country, service, message, ...['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'landing_page'].map(metadata)).run();
+      // Keep delivery independent of the saved enquiry and the visitor's response.
+      const notification = notifyEnquiry(env, { id, name, email, company, country, service, message });
+      if (ctx?.waitUntil) ctx.waitUntil(notification);
+      else await notification;
       return reply({ success: true }, 201);
     } catch { return reply({ error: 'Your enquiry could not be saved. Please try again or email me directly.' }, 503); }
   },

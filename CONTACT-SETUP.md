@@ -24,7 +24,20 @@ Worker source and this guide are excluded from GitHub Pages by `_config.yml`.
 
 Only the production origin is accepted. Local preview can show the form, but cannot submit to the production Worker. Use a separate staging Worker and Turnstile testing keys for local integration tests.
 
-Enquiries are saved to D1. Email notifications, administrator login, a private dashboard and follow-up automation are not included yet. The public Worker provides no endpoint to read leads.
+Enquiries are saved to D1. Brevo notifications can be enabled as described below. Administrator login, a private dashboard and follow-up automation are not included yet. The public Worker provides no endpoint to read leads.
+
+## Brevo Notifications
+
+1. In Brevo, authenticate `rosveluz.com` and add the verified sender `hello@rosveluz.com`. Keep Cloudflare's incoming-mail MX records unchanged.
+2. In Settings > SMTP & API > API keys & MCP, generate a separate API key named `Portfolio contact worker`. This is an API key, not the SMTP key used by Gmail. Do not share it or put it in the website source.
+3. In Cloudflare > Workers & Pages > portfolio-contact > Settings > Variables and Secrets, add `BREVO_API_KEY` as an encrypted production secret containing that key. Preserve `TURNSTILE_SECRET`, `ALLOWED_ORIGIN`, and the `DB` binding.
+4. Replace the deployed Worker code with the updated `cloudflare/contact-worker.js` and deploy. Publishing GitHub Pages does not deploy this Worker.
+5. Submit a new test enquiry. Confirm the D1 row, then check the inbox/spam folder receiving mail forwarded from `hello@rosveluz.com`. The notification's Reply-To is the visitor's address.
+6. Check Brevo > Transactional > Logs for delivery status. Worker logs show acceptance, rejection status, unavailable delivery, or a missing key using the lead reference, without logging personal data or credentials.
+
+Notifications are plain-text messages from `hello@rosveluz.com` to `hello@rosveluz.com`, forwarded by Cloudflare to the verified Gmail destination. No marketing contact is created and no automatic email is sent to the visitor.
+
+The Worker attempts delivery in the background only after D1 saves the enquiry. A missing key or email failure does not change the successful form response. Notifications have a 10-second request timeout and are best-effort: there is no durable retry queue yet. D1 remains the source of truth; check it if delivery fails. Brevo API acceptance does not guarantee inbox delivery. Submitted details are sent to Brevo for notification delivery.
 
 ## Maintenance
 

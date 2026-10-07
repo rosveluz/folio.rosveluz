@@ -124,3 +124,62 @@ test('only verified contact tokens save a parameterized lead; database failures 
     globalThis.crypto = originalCrypto;
   }
 });
+
+test('Brevo notifications run after saving, use visitor Reply-To, and do not expose secrets or change acceptance on failure', async () => {
+  const originalFetch = globalThis.fetch, originalCrypto = globalThis.crypto;
+  const originalLog = { info: console.info, warn: console.warn, error: console.error };
+  globalThis.crypto = webcrypto;
+  const logs = [];
+  for (const level of Object.keys(originalLog)) console[level] = (...values) => logs.push(values);
+  let saved = false, failDatabase = false, calls = 0, mode = 'success', sent;
+  const env = {
+    ALLOWED_ORIGIN: origin, TURNSTILE_SECRET: 'test-secret', BREVO_API_KEY: 'private-api-key',
+    DB: { prepare() { return { bind() { return { async run() { if (failDatabase) throw new Error('Unavailable'); saved = true; } }; } }; } },
+  };
+  globalThis.fetch = async (url, options) => {
+    if (url.includes('siteverify')) return Response.json({ success: true, hostname: 'folio.rosveluz.com', action: 'contact' });
+    assert.equal(url, 'https://api.brevo.com/v3/smtp/email');
+    assert.equal(saved, true);
+    assert.equal(options.headers['api-key'], env.BREVO_API_KEY);
+    assert.equal(options.method, 'POST');
+    calls++;
+    sent = JSON.parse(options.body);
+    if (mode === 'network') throw new Error('Sensitive provider details');
+    return Response.json(mode === 'success' ? { messageId: 'example' } : { error: 'Rejected' }, { status: mode === 'success' ? 201 : 401 });
+  };
+  try {
+    for (mode of ['success', 'rejected', 'network']) {
+      saved = false;
+      const background = [];
+      const result = await worker.fetch(request({ ...payload, message: '<script>not HTML</script>' }), env, { waitUntil(promise) { background.push(promise); } });
+      assert.equal(result.status, 201);
+      assert.deepEqual(await result.json(), { success: true });
+      assert.equal(background.length, 1);
+      await Promise.all(background);
+      assert.equal(sent.sender.email, 'hello@rosveluz.com');
+      assert.equal(sent.to[0].email, 'hello@rosveluz.com');
+      assert.equal(sent.replyTo.email, payload.email);
+      assert.ok(sent.textContent.includes('<script>not HTML</script>'));
+      assert.equal(sent.htmlContent, undefined);
+      assert.ok(!JSON.stringify(sent).includes(payload.turnstileToken));
+    }
+    assert.equal(calls, 3);
+    delete env.BREVO_API_KEY;
+    assert.equal((await worker.fetch(request(), env)).status, 201);
+    assert.equal(calls, 3);
+    failDatabase = true;
+    assert.equal((await worker.fetch(request(), env)).status, 503);
+    assert.equal((await worker.fetch(request({ ...payload, turnstileToken: '' }), env)).status, 400);
+    assert.equal(calls, 3);
+    const logText = JSON.stringify(logs);
+    for (const sensitive of ['private-api-key', payload.email, payload.name, payload.message, 'Sensitive provider details']) {
+      assert.ok(!logText.includes(sensitive));
+    }
+    assert.match(logText, /missing_api_key/);
+    assert.match(logText, /401/);
+  } finally {
+    globalThis.fetch = originalFetch;
+    globalThis.crypto = originalCrypto;
+    Object.assign(console, originalLog);
+  }
+});

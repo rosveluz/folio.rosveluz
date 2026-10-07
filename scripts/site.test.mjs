@@ -30,6 +30,7 @@ test('site build produces linked HTML project and contact pages with unique meta
     assert.equal((page.match(/rel="canonical"/g) || []).length, 1);
     const contact = await readFile(path.join(fixture, 'contact', 'index.html'), 'utf8');
     assert.match(contact, /mailto:hello@rosveluz.com/);
+    assert.doesNotMatch(contact, /mailto:rosveluz@gmail.com/);
     assert.match(contact, /<title>Contact Ros Veluz/);
     const sitemap = await readFile(path.join(fixture, 'sitemap.xml'), 'utf8');
     for (const url of urls) assert.ok(sitemap.includes(`<loc>https://folio.rosveluz.com${url}</loc>`));
