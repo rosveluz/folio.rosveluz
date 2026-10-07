@@ -191,10 +191,10 @@ test('Brevo notifications run after saving, use visitor Reply-To, and do not exp
     calls++;
     sent = JSON.parse(options.body);
     if (mode === 'network') throw new Error('Sensitive provider details');
-    return Response.json(mode === 'success' ? { messageId: 'example' } : { error: 'Rejected' }, { status: mode === 'success' ? 201 : 401 });
+    return Response.json(mode === 'success' ? { messageId: 'example' } : mode === 'ip' ? { code: 'unauthorized', message: 'Unrecognised IP address: private-provider-address' } : { code: 'private-provider-code', message: 'Sensitive provider details' }, { status: mode === 'success' ? 201 : 401 });
   };
   try {
-    for (mode of ['success', 'rejected', 'network']) {
+    for (mode of ['success', 'rejected', 'network', 'ip']) {
       saved = false;
       const background = [];
       const result = await worker.fetch(request({ ...payload, message: '<script>not HTML</script>' }), env, { waitUntil(promise) { background.push(promise); } });
@@ -209,20 +209,25 @@ test('Brevo notifications run after saving, use visitor Reply-To, and do not exp
       assert.equal(sent.htmlContent, undefined);
       assert.ok(!JSON.stringify(sent).includes(payload.turnstileToken));
     }
-    assert.equal(calls, 3);
+    assert.equal(calls, 4);
     delete env.BREVO_API_KEY;
     assert.equal((await worker.fetch(request(), env)).status, 201);
-    assert.equal(calls, 3);
+    assert.equal(calls, 4);
     failDatabase = true;
     assert.equal((await worker.fetch(request(), env)).status, 503);
     assert.equal((await worker.fetch(request({ ...payload, turnstileToken: '' }), env)).status, 400);
-    assert.equal(calls, 3);
+    assert.equal(calls, 4);
     const logText = JSON.stringify(logs);
-    for (const sensitive of ['private-api-key', payload.email, payload.name, payload.message, 'Sensitive provider details']) {
+    for (const sensitive of ['private-api-key', payload.email, payload.name, payload.message, 'Sensitive provider details', 'private-provider-code', 'private-provider-address']) {
       assert.ok(!logText.includes(sensitive));
     }
     assert.match(logText, /missing_api_key/);
     assert.match(logText, /401/);
+    const rejected = logs.filter(([message]) => message === 'Enquiry notification rejected');
+    assert.equal(rejected[0][1].providerCode, 'unknown');
+    assert.equal(rejected[0][1].ipRestrictionMentioned, false);
+    assert.equal(rejected[1][1].providerCode, 'unauthorized');
+    assert.equal(rejected[1][1].ipRestrictionMentioned, true);
   } finally {
     globalThis.fetch = originalFetch;
     globalThis.crypto = originalCrypto;

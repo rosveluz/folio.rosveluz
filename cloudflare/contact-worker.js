@@ -25,7 +25,10 @@ async function notifyEnquiry(env, lead) {
       signal: AbortSignal.timeout(10000),
     });
     if (!response.ok) {
-      console.error('Enquiry notification rejected', { leadId: lead.id, status: response.status });
+      const failure = await response.json().catch(() => null);
+      const providerCode = ['unauthorized', 'permission_denied', 'invalid_parameter', 'missing_parameter', 'not_enough_credits', 'account_under_validation'].includes(failure?.code) ? failure.code : 'unknown';
+      const ipRestrictionMentioned = typeof failure?.message === 'string' && /\bip\b/i.test(failure.message) && /unauthori[sz]ed|unrecogni[sz]ed|not allowed|block/i.test(failure.message);
+      console.error('Enquiry notification rejected', { leadId: lead.id, status: response.status, providerCode, ipRestrictionMentioned });
       return;
     }
     console.info('Enquiry notification accepted by Brevo', { leadId: lead.id });
