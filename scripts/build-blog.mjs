@@ -55,7 +55,7 @@ function page({ title, description, url, image, content, footer, preview, post }
     gtag('config', 'G-9MT0GQPDPR');
   </script>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" sizes="any" href="/img/rvz-blk.svg?v=1" />
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/img/favicon.svg?v=2" />
   <title>${esc(title)} | Rosveluz</title><meta name="description" content="${esc(description)}" />
   <link rel="canonical" href="${origin}${url}" />
   <meta property="og:title" content="${esc(title)}" /><meta property="og:description" content="${esc(description)}" />
