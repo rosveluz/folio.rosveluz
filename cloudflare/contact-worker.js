@@ -42,7 +42,10 @@ export default {
       headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS';
       headers['Access-Control-Allow-Headers'] = 'Content-Type';
     }
-    const reply = (body, status) => Response.json(body, { status, headers });
+    const reply = (body, status, diagnostics = {}) => {
+      if (status === 400) console.warn('Enquiry submission rejected', { status, reason: body.error, ...diagnostics });
+      return Response.json(body, { status, headers });
+    };
     if (new URL(request.url).pathname !== '/submit') return reply({ error: 'Not found' }, 404);
     if (!env.ALLOWED_ORIGIN || !env.TURNSTILE_SECRET || !env.DB) return reply({ error: 'The contact service is not configured yet. Please email me directly.' }, 503);
     if (origin !== env.ALLOWED_ORIGIN) return reply({ error: 'Origin not allowed' }, 403);
@@ -69,8 +72,12 @@ export default {
     const name = text('name', 100), email = text('email', 254), company = text('company', 150);
     const country = text('country', 100), service = text('service', 100), message = text('message', 5000);
     const token = text('turnstileToken', 2048);
-    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !country || !services.has(service) || message.length < 10 || !token) {
-      return reply({ error: 'Please complete the required fields and verification.' }, 400);
+    const invalidFields = Object.entries({
+      name: !name, email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), country: !country,
+      service: !services.has(service), message: message.length < 10, turnstileToken: !token,
+    }).filter(([, invalid]) => invalid).map(([field]) => field);
+    if (invalidFields.length) {
+      return reply({ error: 'Please complete the required fields and verification.' }, 400, { invalidFields });
     }
     try {
       const verification = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
@@ -81,7 +88,11 @@ export default {
       if (!verification.ok) return reply({ error: 'Verification is unavailable. Please try again.' }, 503);
       const result = await verification.json();
       if (!result.success || result.hostname !== new URL(env.ALLOWED_ORIGIN).hostname || result.action !== 'contact') {
-        return reply({ error: 'Verification expired or failed. Please try again.' }, 400);
+        return reply({ error: 'Verification expired or failed. Please try again.' }, 400, {
+          verificationSucceeded: result.success === true,
+          hostnameMatches: result.hostname === new URL(env.ALLOWED_ORIGIN).hostname,
+          actionMatches: result.action === 'contact',
+        });
       }
       const campaign = payload.campaign && typeof payload.campaign === 'object' ? payload.campaign : {};
       const metadata = (key) => typeof campaign[key] === 'string' ? campaign[key].slice(0, 200) : '';

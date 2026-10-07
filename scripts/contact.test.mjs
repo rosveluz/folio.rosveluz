@@ -93,6 +93,25 @@ test('contact endpoint rejects other origins and invalid input before verificati
   assert.equal(preflight.headers.get('Access-Control-Allow-Origin'), origin);
 });
 
+test('rejection diagnostics identify invalid fields without logging submitted values', async () => {
+  const originalWarn = console.warn;
+  const logs = [];
+  console.warn = (...values) => logs.push(values);
+  try {
+    const env = { ALLOWED_ORIGIN: origin, TURNSTILE_SECRET: 'private-secret', DB: {} };
+    const response = await worker.fetch(request({ ...payload, service: 'Unsupported service', message: 'short' }), env);
+    assert.equal(response.status, 400);
+    assert.deepEqual(logs[0][1].invalidFields, ['service', 'message']);
+    assert.equal(logs[0][0], 'Enquiry submission rejected');
+    const logText = JSON.stringify(logs);
+    for (const sensitive of [payload.name, payload.email, payload.turnstileToken, 'private-secret', 'Unsupported service', 'short']) {
+      assert.ok(!logText.includes(sensitive));
+    }
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
 test('only verified contact tokens save a parameterized lead; database failures do not report success', async () => {
   const originalFetch = globalThis.fetch;
   const originalCrypto = globalThis.crypto;
