@@ -13,14 +13,25 @@ try {
 } catch { /* Storage can be unavailable in private browsing. */ }
 
 function loadTurnstile() {
-  if (window.turnstile) return Promise.resolve(window.turnstile);
+  if (window.turnstile) return new Promise((resolve) => window.turnstile.ready(() => resolve(window.turnstile)));
   if (!turnstileReady) {
     turnstileReady = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      let settled = false;
+      const finish = (error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        if (error) {
+          script.remove();
+          reject(error);
+        } else resolve(window.turnstile);
+      };
+      const timeout = setTimeout(() => finish(new Error('Verification is taking too long to load. Please refresh or email me directly.')), 15000);
+      window.onContactTurnstileReady = () => finish();
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onContactTurnstileReady';
       script.async = true;
-      script.onload = () => resolve(window.turnstile);
-      script.onerror = () => reject(new Error('Verification could not load. Please refresh or email me directly.'));
+      script.onerror = () => finish(new Error('Verification could not load. Please refresh or email me directly.'));
       document.head.append(script);
     });
   }
@@ -35,6 +46,15 @@ export async function initContactForm(form) {
   let widget;
   let submitting = false;
   let completed = false;
+  let verificationTimer;
+  const waitForVerification = () => {
+    clearTimeout(verificationTimer);
+    verificationTimer = setTimeout(() => {
+      if (form.isConnected && !token && !submitting && !completed) {
+        status.textContent = 'Verification is taking longer than expected. Please refresh or email me directly.';
+      }
+    }, 40000);
+  };
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -64,18 +84,24 @@ export async function initContactForm(form) {
     } finally {
       submitting = false;
       token = '';
-      if (!completed && widget !== undefined) window.turnstile.reset(widget);
+      if (!completed && widget !== undefined) {
+        waitForVerification();
+        window.turnstile.reset(widget);
+      }
     }
   });
 
   try {
     const turnstile = await loadTurnstile();
     if (!form.isConnected) return;
+    status.textContent = 'Verifying...';
+    waitForVerification();
     widget = turnstile.render(form.querySelector('[data-turnstile]'), {
       sitekey, action: 'contact', size: 'flexible',
-      callback(value) { token = value; button.disabled = submitting || completed; if (!submitting && !completed) status.textContent = ''; },
-      'expired-callback'() { token = ''; button.disabled = true; },
+      callback(value) { clearTimeout(verificationTimer); token = value; button.disabled = submitting || completed; if (!submitting && !completed) status.textContent = ''; },
+      'expired-callback'() { token = ''; button.disabled = true; status.textContent = 'Verification expired. Verifying again...'; waitForVerification(); },
       'error-callback'(code) {
+        clearTimeout(verificationTimer);
         token = '';
         button.disabled = true;
         status.textContent = 'Verification failed. Please refresh or email me directly.';
@@ -83,6 +109,7 @@ export async function initContactForm(form) {
       },
     });
   } catch (error) {
+    clearTimeout(verificationTimer);
     status.textContent = error.message;
   }
 }

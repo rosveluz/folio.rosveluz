@@ -21,9 +21,9 @@ test('form records a lead event only after acceptance and prevents duplicate sub
     addEventListener(event, handler) { if (event === 'submit') submit = handler; },
   };
   const context = vm.createContext({
-    window: { turnstile: { render(element, options) { callbacks = options; return 1; }, reset() {} }, gtag() { analytics++; } },
+    window: { turnstile: { ready(callback) { callback(); }, render(element, options) { callbacks = options; return 1; }, reset() {} }, gtag() { analytics++; } },
     location: { search: '', pathname: '/contact/' }, sessionStorage: { getItem: () => '{}' },
-    URLSearchParams, AbortSignal,
+    URLSearchParams, AbortSignal, setTimeout: () => 1, clearTimeout() {},
     FormData: class { [Symbol.iterator]() { return Object.entries(payload)[Symbol.iterator](); } },
     fetch: async () => { requests++; return { ok: accepted, json: async () => accepted ? { success: true } : { error: 'Please try again.' } }; },
   });
@@ -41,6 +41,42 @@ test('form records a lead event only after acceptance and prevents duplicate sub
   assert.equal(button.textContent, 'Enquiry sent');
   await submit({ preventDefault() {} });
   assert.equal(requests, 2);
+});
+
+test('verification reports stalled script loading and stalled challenges without enabling submission', async () => {
+  const source = await readFile(new URL('../contact-form.js', import.meta.url), 'utf8');
+  for (const scriptReady of [false, true]) {
+    const timers = new Map();
+    let nextTimer = 0, callbacks, removed = false;
+    const button = { disabled: true }, status = { textContent: 'Loading verification...' };
+    const form = {
+      isConnected: true,
+      querySelector: (selector) => selector === '[type="submit"]' ? button : selector === '[data-contact-status]' ? status : {},
+      addEventListener() {},
+    };
+    const context = vm.createContext({
+      window: scriptReady ? { turnstile: { ready(callback) { callback(); }, render(element, options) { callbacks = options; return 1; } } } : {},
+      document: { createElement: () => ({ remove() { removed = true; } }), head: { append() {} } },
+      location: { search: '', pathname: '/contact/' }, URLSearchParams,
+      setTimeout(callback, delay) { timers.set(++nextTimer, { callback, delay }); return nextTimer; },
+      clearTimeout(id) { timers.delete(id); }, form,
+    });
+    vm.runInContext(source.replace('export async function', 'async function'), context);
+    const initialization = vm.runInContext('initContactForm(form)', context);
+    await Promise.resolve();
+    const timer = [...timers.values()][0];
+    assert.equal(timer.delay, scriptReady ? 40000 : 15000);
+    timer.callback();
+    await initialization;
+    assert.match(status.textContent, /taking (too long|longer than expected)/);
+    assert.equal(button.disabled, true);
+    if (scriptReady) {
+      callbacks.callback('late-valid-token');
+      assert.equal(button.disabled, false);
+      assert.equal(status.textContent, '');
+      assert.equal(timers.size, 0);
+    } else assert.equal(removed, true);
+  }
 });
 
 test('contact endpoint rejects other origins and invalid input before verification', async () => {

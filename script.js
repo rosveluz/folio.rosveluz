@@ -1,6 +1,6 @@
 import { projects } from "./data/projects.js";
 import { renderCards, renderProject, renderContactContent } from "./portfolio-render.js";
-import { initContactForm } from "./contact-form.js";
+import { initContactForm } from "./contact-form.js?v=contact-2";
 
 document.documentElement.classList.add("has-js");
 

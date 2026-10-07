@@ -25,7 +25,8 @@ test('site build produces linked HTML project and contact pages with unique meta
     assert.match(page, /A project with &lt;clear&gt; details\./);
     assert.match(page, /src="\/img\/example.webp"/);
     assert.match(page, /rel="canonical" href="https:\/\/folio.rosveluz.com\/work\/sample-project\/"/);
-    assert.match(page, /src="\/script.js"/);
+    assert.match(page, /src="\/script.js\?v=contact-2"/);
+    assert.match(page, /href="\/styles.css\?v=contact-2"/);
     assert.equal((page.match(/rel="canonical"/g) || []).length, 1);
     const contact = await readFile(path.join(fixture, 'contact', 'index.html'), 'utf8');
     assert.match(contact, /mailto:hello@rosveluz.com/);

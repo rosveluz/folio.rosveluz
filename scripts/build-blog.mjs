@@ -62,7 +62,7 @@ function page({ title, description, url, image, content, footer, preview, post }
   ${image ? `<meta property="og:image" content="${esc(new URL(image, origin).href)}" /><meta property="og:image:alt" content="${esc(post?.heroAlt || post?.coverAlt || '')}" />` : ''}
   ${preview || post?.status === 'draft' ? '<meta name="robots" content="noindex, nofollow" />' : ''}
   ${metadata}
-  <link rel="stylesheet" href="/styles.css" /><link rel="stylesheet" href="/blog.css" />
+  <link rel="stylesheet" href="/styles.css?v=contact-2" /><link rel="stylesheet" href="/blog.css" />
   <script type="module" src="/blog.js"></script>
 </head><body class="blog-page">
   <a class="skip-link" href="#blog-main">Skip to content</a>
