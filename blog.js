@@ -1,4 +1,5 @@
 import './header-menu.js';
+import './contact-form.js';
 
 const tocLinks = [...document.querySelectorAll('.article-toc a')];
 if (tocLinks.length && 'IntersectionObserver' in window) {

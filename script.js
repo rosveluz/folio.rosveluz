@@ -1,5 +1,6 @@
 import { projects } from "./data/projects.js";
 import { renderCards, renderProject, renderContactContent } from "./portfolio-render.js";
+import { initContactForm } from "./contact-form.js";
 
 document.documentElement.classList.add("has-js");
 
@@ -212,6 +213,7 @@ function renderContact() {
   setFilterPanel(false);
   app.className = "site-main contact-view";
   app.innerHTML = renderContactContent();
+  initContactForm(app.querySelector("[data-contact-form]"));
 }
 
 function openProject(projectId, updateHash = true) {

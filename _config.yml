@@ -2,6 +2,8 @@
 exclude:
   - content
   - scripts
+  - cloudflare
+  - CONTACT-SETUP.md
   - node_modules
   - BLOG-GUIDE.md
   - package.json

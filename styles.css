@@ -521,6 +521,8 @@ figcaption {
   display: grid;
   place-items: center;
   min-height: 58vh;
+  padding-top: 32px;
+  padding-bottom: 48px;
 }
 
 .contact-panel {
@@ -532,9 +534,9 @@ figcaption {
 
 .contact-panel h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 4.25rem);
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 0.95;
+  line-height: 1.2;
 }
 
 .contact-kicker,
@@ -575,6 +577,78 @@ figcaption {
 
 .contact-links a:hover {
   text-decoration: underline;
+}
+
+.contact-form {
+  display: grid;
+  gap: 20px;
+  text-align: left;
+  min-width: 0;
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  font-size: 0.875rem;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--soft);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.contact-form input:focus-visible,
+.contact-form select:focus-visible,
+.contact-form textarea:focus-visible,
+.contact-submit:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.contact-form-note,
+.contact-form-status {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.contact-submit {
+  min-height: 44px;
+  min-width: 150px;
+  justify-self: start;
+}
+
+.contact-submit:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+@media (max-width: 560px) {
+  .contact-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .site-footer {

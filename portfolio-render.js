@@ -105,6 +105,25 @@ export function renderContactContent() {
     <section class="contact-panel">
       <p class="contact-kicker">Project inquiries, collaborations, and design work</p>
       <h1>Let's build something clean, useful, and quietly memorable.</h1>
+      <form class="contact-form" data-contact-form>
+        <div class="contact-form-grid">
+          <label>Name<input name="name" autocomplete="name" required maxlength="100" /></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+          <label>Company (optional)<input name="company" autocomplete="organization" maxlength="150" /></label>
+          <label>Country<input name="country" autocomplete="country-name" required maxlength="100" /></label>
+        </div>
+        <label>Service<select name="service" required>
+          <option value="">Select a service</option>
+          <option>Web design</option><option>UI/UX design</option><option>App Prototyping</option>
+          <option>Logo and visual identity</option><option>Graphic design</option><option>Desktop publishing</option><option>Other</option>
+        </select></label>
+        <label>Project details<textarea name="message" rows="5" required minlength="10" maxlength="5000"></textarea></label>
+        <p class="contact-form-note">Your details will be used to respond to this enquiry. You will not be subscribed to marketing emails.</p>
+        <div data-turnstile></div>
+        <button class="nav-pill contact-submit" type="submit" disabled>Send enquiry</button>
+        <p class="contact-form-status" role="status" aria-live="polite" data-contact-status>Loading verification...</p>
+        <noscript><p>Please email me directly to discuss your project.</p></noscript>
+      </form>
       <a class="contact-email" href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
       <div class="contact-links" aria-label="Related links">
         <a href="https://www.rosveluz.com/">www.rosveluz.com</a>
