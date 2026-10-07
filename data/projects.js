@@ -2,6 +2,42 @@ export const categories = ["All", "Web Design", "UIUX", "Logo Design", "Graphics
 
 export const projects = [
   {
+    id: "ano-sayo-kitchen-logo-design",
+    title: "Ano Sayo Kitchen Logo Design",
+    detail: "Logo identity and packaging for Ano Sayo Kitchen",
+    category: "Logo Design",
+    date: "2020-09-20",
+    description: "A red-and-white identity for Ano Sayo Kitchen, built around a bowl and leafy ingredients framed by an arched outline. The logo is presented in stacked and circular variations, with mockup applications across takeaway packaging, labels, stationery, signage and an apron.",
+    cover: "img/projects/ano-sayo-kitchen-logo-design/cover.webp",
+    images: [
+      {
+        desktopSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard2.webp",
+        mobileSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard10.webp",
+        caption: "Red-and-white logo variations and an overview of the identity applications.",
+      },
+      {
+        desktopSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard3.webp",
+        mobileSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard11.webp",
+        caption: "Branded paper bags, labels, stickers and tags.",
+      },
+      {
+        desktopSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard4.webp",
+        mobileSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard12.webp",
+        caption: "Storefront signage and window decal mockups.",
+      },
+      {
+        desktopSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard5.webp",
+        mobileSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard13.webp",
+        caption: "Takeaway packaging with branded bowls, wrappers, napkins and chopstick sleeves.",
+      },
+      {
+        desktopSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard6.webp",
+        mobileSrc: "img/projects/ano-sayo-kitchen-logo-design/Artboard14.webp",
+        caption: "Logo applications across cups, bowls and takeaway bags.",
+      },
+    ],
+  },
+  {
     id: "logo-designs-2015-2017",
     title: "Logo Designs - 2015-2017",
     detail: "Assorted Logo Designs for the clients of PointB Education",
