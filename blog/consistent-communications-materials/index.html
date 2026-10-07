@@ -1,5 +1,13 @@
 <!doctype html>
 <html lang="en"><head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MT0GQPDPR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9MT0GQPDPR');
+  </script>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keeping Websites, Publications, and Brand Materials Consistent | Rosveluz</title><meta name="description" content="Consistency does not mean repeating the same layout. It means giving an organization&#39;s website, publications, and supporting materials a shared visual foundation." />
   <link rel="canonical" href="https://folio.rosveluz.com/blog/consistent-communications-materials/" />
@@ -13,13 +21,18 @@
   <script type="module" src="/blog.js"></script>
 </head><body class="blog-page">
   <a class="skip-link" href="#blog-main">Skip to content</a>
-  <header class="site-header blog-header" data-header>
-    <a class="brand" href="/#home" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/#home">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
-    <button class="mobile-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="blog-mobile-nav" data-menu-toggle><span></span><span></span><span></span></button>
-    <a class="contact-button" href="/#contact" aria-label="Open contact page"><img src="/img/envelope.svg" alt="" /></a>
-    <nav class="mobile-nav" id="blog-mobile-nav" aria-label="Mobile navigation" data-mobile-nav><a href="/#home">Work</a><a href="/about/">About</a></nav>
-  </header>
+      <header class="site-header blog-header" data-header>
+      <a class="brand" href="/" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
+      <button class="nav-pill header-menu-toggle" type="button" aria-expanded="false" aria-controls="site-page-menu" data-page-menu-toggle>MENU</button>
+      <nav class="header-page-menu" id="site-page-menu" aria-label="Page navigation" hidden>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/service/">Services</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </header>
   <main class="site-main blog-main" id="blog-main" tabindex="-1"><article class="blog-article">
     <header class="article-heading">
       <p class="blog-meta"><span>Brand / Communications</span><time datetime="2026-10-07">Oct 07, 2026</time></p>
@@ -51,7 +64,7 @@
 <h2 id="treat-consistency-as-a-working-practice">Treat Consistency as a Working Practice</h2>
 <p>For me, a coherent public presence comes from connecting design decisions with everyday production. The goal is not to remove all variation. It is to make the next publication, web page, or announcement easier to bring into the same visual family.</p>
 <p>That is the kind of communications work I am interested in: giving organizations clear, considered materials and a foundation they can continue using.</p>
-<p><a href="/blog/designing-sailing-forward/">Read about the Sailing Forward publication work</a> or <a href="/#contact">discuss your communications materials</a>.</p>
+<p><a href="/blog/designing-sailing-forward/">Read about the Sailing Forward publication work</a> or <a href="/contact/">discuss your communications materials</a>.</p>
 </div>
     </div>
     <a class="article-next" href="/blog/designing-eiger-websites/"><span class="blog-meta">Next article</span><span class="article-next-title">Designing the Eiger Websites: Clear Communication for Distinct Audiences</span><img src="/img/Down%20Arrow.svg" alt="" /></a>
@@ -59,7 +72,7 @@
   <footer class="site-footer">
       <div class="footer-links">
         <a href="/about/">About</a>
-        <a href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
+        <a href="/service/">Services</a>
       </div>
       <div class="footer-links">
         <a href="/blog/">Blog</a>
@@ -69,7 +82,7 @@
         <a href="#" aria-label="LinkedIn"><img src="/img/linkedin.svg" alt="" /></a>
         <a href="#" aria-label="Instagram"><img src="/img/instagram.svg" alt="" /></a>
         <a href="#" aria-label="Facebook"><img src="/img/facebook.svg" alt="" /></a>
-        <a class="mini-envelope" href="/#contact" aria-label="Contact"><img src="/img/envelope.svg" alt="" /></a>
+        <a class="mini-envelope" href="/contact/" aria-label="Contact"><img src="/img/envelope.svg" alt="" /></a>
       </div>
     </footer>
 </body></html>

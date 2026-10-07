@@ -55,13 +55,13 @@ See [BLOG-GUIDE.md](BLOG-GUIDE.md) for local previews, Markdown articles, and th
 
 ## Publish Updates
 
-Before committing changes to blog content or templates, run:
+Before committing changes to projects, blog content or templates, run:
 
 ```powershell
-npm run build:blog
-npm run test:blog
+npm run build
+npm test
 ```
 
-Commit the page, style, script, article source, image, and configuration changes, including the generated `blog/` pages and `data/blog-status.json`. Then push through the existing GitHub Pages workflow. The build command does not deploy the site.
+Commit the page, style, script, article source, image, and configuration changes, including the generated `work/`, `contact/` and `blog/` pages, `sitemap.xml`, `robots.txt` and `data/blog-status.json`. Then push through the existing GitHub Pages workflow. The build command does not deploy the site.
 
-The About page is at `/about/` and the blog index is at `/blog/`. Preview the public output with `npm run preview:blog -- --public`. Local preview output and dependencies are excluded from Git; draft Markdown and build tools are excluded from the Pages site by `_config.yml`.
+Pages use `/about/`, `/service/`, `/contact/`, `/blog/` and `/work/<project-id>/`. Run `npm run build` after editing `data/projects.js` to regenerate project pages and the sitemap. Old `#work/...` and `#contact` links forward to their new pages. Preview the public output with `npm run preview:blog -- --public`. Local preview output and dependencies are excluded from Git; draft Markdown and build tools are excluded from the Pages site by `_config.yml`.

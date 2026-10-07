@@ -60,7 +60,7 @@ Write your conclusion here.
 
 `hero` and `heroAlt` are optional; the cover is used when they are absent. Reading time is calculated automatically. The newest featured article is used for the large index feature; if none is featured, the newest article is used.
 
-Use `##` for main sections and `###` for subsections. Two or more main sections create a contents list automatically. Links to local pages and images must start with `/`, for example `/#home`. External links use full HTTPS URLs. Raw HTML is displayed as text rather than executed.
+Use `##` for main sections and `###` for subsections. Two or more main sections create a contents list automatically. Links to local pages and images must start with `/`, for example `/`. External links use full HTTPS URLs. Raw HTML is displayed as text rather than executed.
 
 ## Wider Images
 
@@ -79,7 +79,7 @@ Place images on their own line. Add a title after the image path to create a cap
 3. In the terminal, run:
 
 ```powershell
-npm run build:blog
+npm run build
 ```
 
 The command writes the public pages into `blog/` and updates `data/blog-status.json`. Only published articles are included. This also enables the footer Blog link when the site loads.
@@ -90,11 +90,11 @@ To review just the published pages locally, stop any existing preview with **Ctr
 npm run preview:blog -- --public
 ```
 
-This serves the generated public build without samples or drafts. After changing a published article, run `npm run build:blog` again and refresh the browser.
+This serves the generated public build without samples or drafts. After changing a published article, run `npm run build` again and refresh the browser.
 
 4. Review and commit the Markdown, article images, generated `blog/` pages, and `data/blog-status.json`, then push through your normal GitHub Pages workflow. The build command itself does not publish or push anything.
 
-Run `npm run build:blog` again whenever you change a published article, its status, or the shared blog templates. To unpublish, set its status back to `draft`, rebuild, and commit the updated generated files.
+Run `npm run build` again whenever you change a published article, its status, or the shared blog templates. To unpublish, set its status back to `draft`, rebuild, and commit the updated generated files.
 
 The article URL will be `https://folio.rosveluz.com/blog/my-first-article/`. Generated HTML includes the title, description, canonical URL, Open Graph metadata, and BlogPosting structured data.
 

@@ -1,6 +1,9 @@
 import { projects } from "./data/projects.js";
+import { renderCards, renderProject, renderContactContent } from "./portfolio-render.js";
 
-fetch("./data/blog-status.json")
+document.documentElement.classList.add("has-js");
+
+fetch("/data/blog-status.json")
   .then((response) => response.ok ? response.json() : null)
   .then((status) => {
     if (!status?.published) return;
@@ -15,13 +18,13 @@ fetch("./data/blog-status.json")
 
 const app = document.querySelector("#app");
 const header = document.querySelector("[data-header]");
-const brand = document.querySelector(".brand");
 const filterButtons = [...document.querySelectorAll("[data-filter]")];
 const filterToggles = [...document.querySelectorAll("[data-filter-toggle]")];
 const menuToggles = [...document.querySelectorAll("[data-menu-toggle]")];
 const mobileNav = document.querySelector("[data-mobile-nav]");
 
-let currentFilter = "All";
+const requestedFilter = new URLSearchParams(window.location.search).get("category");
+let currentFilter = projects.some((project) => project.category === requestedFilter) ? requestedFilter : "All";
 const projectsPerPage = 12;
 let currentPage = 1;
 let paginationCriteria = "";
@@ -57,8 +60,8 @@ function setFilterPanel(open) {
 }
 
 function syncHash(hash) {
-  if (window.location.hash !== hash) {
-    window.history.pushState(null, "", hash);
+  if (window.location.hash !== hash || (!hash && window.location.pathname !== "/")) {
+    window.history.pushState(null, "", hash || "/");
   }
 }
 
@@ -82,31 +85,6 @@ function sortProjects(projectList) {
     const dateB = Date.parse(b.date);
     return projectControls.sort === "oldest" ? dateA - dateB : dateB - dateA;
   });
-}
-
-function mediaStyles(item) {
-  const styles = [];
-  if (item.background) styles.push(`--media-background: ${item.background}`);
-  if (item.aspectRatio) styles.push(`--media-aspect: ${item.aspectRatio}`);
-  if (item.coverPosition) styles.push(`object-position: ${item.coverPosition}`);
-  return styles.join("; ");
-}
-
-function mediaClass(item) {
-  return item.fit === "contain" ? "is-contained" : "";
-}
-
-function renderMedia(item, mobile = false, context = "project") {
-  const src = mobile ? item.mobileSrc || item.desktopSrc : item.desktopSrc;
-  const className = mediaClass(item);
-  const style = mediaStyles(item);
-
-  if (item.type === "video") {
-    const controls = context === "project" ? "controls" : "";
-    return `<video src="${src}" ${controls} muted playsinline preload="metadata" class="${className}" style="${style}"></video>`;
-  }
-
-  return `<img src="${src}" alt="" loading="lazy" class="${className}" style="${style}" />`;
 }
 
 function filterPanel() {
@@ -159,42 +137,22 @@ function renderHome(filter = currentFilter) {
 
   app.className = "site-main home-view";
   app.innerHTML = `
+    <h1 class="visually-hidden">Ros Veluz design portfolio</h1>
     ${filterPanel()}
     <section class="work-grid ${pageCount > 1 ? "is-paginated" : ""}" aria-label="Portfolio work" tabindex="-1">
-      ${pageProjects
-        .map(
-          (project) => `
-            <article class="work-card">
-              <button class="work-card-button" type="button" data-project-id="${project.id}">
-                ${renderMedia(
-                  {
-                    desktopSrc: project.cover,
-                    fit: project.coverBackground ? "contain" : project.coverFit,
-                    background: project.coverBackground,
-                    coverPosition: project.coverPosition,
-                  },
-                  false,
-                  "cover"
-                )}
-                <span class="work-title">${project.title}</span>
-                <span class="work-detail">${project.detail}</span>
-              </button>
-            </article>
-          `
-        )
-        .join("") || `<p class="empty-state">No projects match the current filters.</p>`}
+      ${renderCards(pageProjects) || `<p class="empty-state">No projects match the current filters.</p>`}
     </section>
     ${pageCount > 1 ? `
       <nav class="work-pagination" aria-label="Portfolio pages">
         <button type="button" data-page="${currentPage - 1}" aria-label="Previous page" title="Previous page" ${currentPage === 1 ? "disabled" : ""}>
-          <img class="pagination-arrow is-previous" src="img/Down%20Arrow.svg" alt="" />
+          <img class="pagination-arrow is-previous" src="/img/Down%20Arrow.svg" alt="" />
         </button>
         ${Array.from({ length: pageCount }, (_, index) => {
           const page = index + 1;
           return `<button type="button" data-page="${page}" aria-label="Page ${page}" ${page === currentPage ? 'aria-current="page"' : ""}>${page}</button>`;
         }).join("")}
         <button type="button" data-page="${currentPage + 1}" aria-label="Next page" title="Next page" ${currentPage === pageCount ? "disabled" : ""}>
-          <img class="pagination-arrow is-next" src="img/Down%20Arrow.svg" alt="" />
+          <img class="pagination-arrow is-next" src="/img/Down%20Arrow.svg" alt="" />
         </button>
       </nav>
     ` : ""}
@@ -211,9 +169,7 @@ function renderHome(filter = currentFilter) {
     });
   });
 
-  app.querySelectorAll("[data-project-id]").forEach((button) => {
-    button.addEventListener("click", () => openProject(button.dataset.projectId));
-  });
+
 }
 
 function setupHomeControls() {
@@ -255,36 +211,7 @@ function renderContact() {
   closeMobileMenu();
   setFilterPanel(false);
   app.className = "site-main contact-view";
-  app.innerHTML = `
-    <section class="contact-panel">
-      <p class="contact-kicker">Project inquiries, collaborations, and design work</p>
-      <h1>Let's build something clean, useful, and quietly memorable.</h1>
-      <a class="contact-email" href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
-      <div class="contact-links" aria-label="Related links">
-        <a href="https://www.rosveluz.com/">www.rosveluz.com</a>
-        <a href="https://art.rosveluz.com/" target="_blank" rel="noopener noreferrer">art.rosveluz.com</a>
-      </div>
-    </section>
-  `;
-}
-
-function projectDescription(project) {
-  return `
-    <div class="project-copy">
-      <button class="project-copy-toggle" type="button" aria-expanded="false" data-copy-toggle>
-        <span>${project.title}</span>
-        <img class="chevron" src="img/Down%20Arrow.svg" alt="" />
-      </button>
-      <div class="project-copy-content">
-        <p class="project-detail-label">${project.detail}</p>
-        <p class="project-description" data-project-description>${project.description}</p>
-      </div>
-    </div>
-  `;
-}
-
-function projectImage(image, mobile = false) {
-  return renderMedia(image, mobile, "project");
+  app.innerHTML = renderContactContent();
 }
 
 function openProject(projectId, updateHash = true) {
@@ -295,56 +222,13 @@ function openProject(projectId, updateHash = true) {
   setActiveFilter(project.category);
   if (detailObserver) detailObserver.disconnect();
   if (carouselObserver) carouselObserver.disconnect();
-  if (updateHash) syncHash(`#work/${project.id}`);
+  if (updateHash) {
+    window.location.assign(`/work/${project.id}/`);
+    return;
+  }
 
   app.className = "site-main detail-view";
-  app.innerHTML = `
-    <section class="project-layout" aria-label="${project.title}">
-      <aside class="thumb-rail" aria-label="Project image thumbnails">
-        ${project.images
-          .map(
-            (image, index) => `
-              <button class="thumb-button ${index === 0 ? "is-active" : ""}" type="button" data-thumb="${index}">
-                ${renderMedia(image, true, "thumbnail")}
-              </button>
-            `
-          )
-          .join("")}
-      </aside>
-
-      <section class="project-media-column">
-        <a class="breadcrumb" href="#home">All / ${project.category} / ${project.title}</a>
-        <div class="desktop-image-stack">
-          ${project.images
-            .map(
-              (image, index) => `
-                <figure class="project-figure" id="project-image-${index}" data-image-index="${index}">
-                  ${projectImage(image)}
-                  <figcaption>${image.caption}</figcaption>
-                </figure>
-              `
-            )
-            .join("")}
-        </div>
-        <div class="mobile-carousel" aria-label="Project images" data-carousel>
-          ${project.images
-            .map(
-              (image, index) => `
-                <figure class="carousel-slide" data-slide-index="${index}">
-                  ${projectImage(image, true)}
-                  <figcaption>${image.caption}</figcaption>
-                </figure>
-              `
-            )
-            .join("")}
-        </div>
-      </section>
-
-      <aside class="project-description-column">
-        ${projectDescription(project)}
-      </aside>
-    </section>
-  `;
+  app.innerHTML = renderProject(project);
 
   setupDetailInteractions();
   app.focus({ preventScroll: true });
@@ -410,20 +294,18 @@ function setupDetailInteractions() {
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const filter = button.dataset.filter;
+    if (window.location.pathname !== "/") {
+      window.location.assign(filter === "All" ? "/" : `/?category=${encodeURIComponent(filter)}`);
+      return;
+    }
     if (activeProject) {
       renderHome(filter);
-      syncHash("#home");
+      syncHash("");
     } else {
       renderHome(filter);
     }
     closeMobileMenu();
   });
-});
-
-brand?.addEventListener("click", (event) => {
-  event.preventDefault();
-  renderHome("All");
-  syncHash("#home");
 });
 
 menuToggles.forEach((button) => {
@@ -436,9 +318,13 @@ menuToggles.forEach((button) => {
 
 filterToggles.forEach((button) => {
   button.addEventListener("click", () => {
+    if (window.location.pathname !== "/") {
+      window.location.assign("/");
+      return;
+    }
     if (activeProject) {
       renderHome(currentFilter);
-      syncHash("#home");
+      syncHash("");
     }
     closeMobileMenu();
     setFilterPanel(!isFilterPanelOpen);
@@ -459,20 +345,28 @@ document.addEventListener("click", (event) => {
 });
 
 window.addEventListener("hashchange", route);
+window.addEventListener("popstate", route);
 
 function route() {
   const hash = window.location.hash;
-
   if (hash.startsWith("#work/")) {
-    openProject(hash.replace("#work/", ""), false);
+    window.location.replace(`/work/${encodeURIComponent(hash.slice(6))}/`);
     return;
   }
-
   if (hash === "#contact") {
+    window.location.replace("/contact/");
+    return;
+  }
+  if (hash === "#home") window.history.replaceState(null, "", "/");
+  const projectMatch = window.location.pathname.match(/^\/work\/([a-z0-9-]+)\/$/);
+  if (projectMatch) {
+    openProject(projectMatch[1], false);
+    return;
+  }
+  if (window.location.pathname === "/contact/") {
     renderContact();
     return;
   }
-
   renderHome(currentFilter);
 }
 

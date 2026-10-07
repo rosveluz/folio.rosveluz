@@ -55,4 +55,4 @@ For me, a coherent public presence comes from connecting design decisions with e
 
 That is the kind of communications work I am interested in: giving organizations clear, considered materials and a foundation they can continue using.
 
-[Read about the Sailing Forward publication work](/blog/designing-sailing-forward/) or [discuss your communications materials](/#contact).
+[Read about the Sailing Forward publication work](/blog/designing-sailing-forward/) or [discuss your communications materials](/contact/).

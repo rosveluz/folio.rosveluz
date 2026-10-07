@@ -55,4 +55,4 @@ The Eiger designs reflect an approach I want to bring to more business and organ
 
 A considered corporate website can have character without asking its visitors to work around the design. The content, navigation, and responsive layouts should support the reason someone came to the site.
 
-[View the Eiger website designs, including mobile layouts](/#work/eiger-websites).
+[View the Eiger website designs, including mobile layouts](/work/eiger-websites/).

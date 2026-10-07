@@ -13,6 +13,18 @@
   box-sizing: border-box;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -102,6 +114,55 @@ video {
 .nav-pill:hover {
   background: var(--ink);
   color: var(--paper);
+}
+
+.header-menu-toggle {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  font-size: 0.875rem;
+}
+
+.header-menu-toggle:focus-visible,
+.header-page-menu a:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.header-page-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 25;
+  display: grid;
+  width: 220px;
+  max-width: calc(100vw - 40px);
+  padding: 8px;
+  border: 1px solid var(--soft);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.header-page-menu[hidden] {
+  display: none;
+}
+
+.header-page-menu a {
+  padding: 10px 12px;
+}
+
+.header-page-menu a:hover,
+.header-page-menu a[aria-current="page"] {
+  background: #f2f2f2;
+}
+
+@media (max-width: 760px) {
+  .header-page-menu {
+    right: var(--mobile-gutter);
+  }
 }
 
 .contact-button,
@@ -864,7 +925,7 @@ figcaption {
     transform: rotate(180deg);
   }
 
-  .project-copy-content {
+  .has-js .project-copy-content {
     display: none;
     padding-top: 12px;
   }
@@ -877,7 +938,7 @@ figcaption {
     margin: 0 0 16px;
   }
 
-  .project-description {
+  .has-js .project-description {
     display: -webkit-box;
     overflow: hidden;
     font-size: 1rem;

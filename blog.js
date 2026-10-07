@@ -1,28 +1,4 @@
-const header = document.querySelector('[data-header]');
-const toggle = document.querySelector('[data-menu-toggle]');
-
-function closeMenu() {
-  header.classList.remove('is-menu-open');
-  toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-label', 'Open navigation');
-}
-
-toggle.addEventListener('click', () => {
-  const open = !header.classList.contains('is-menu-open');
-  header.classList.toggle('is-menu-open', open);
-  toggle.setAttribute('aria-expanded', String(open));
-  toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-});
-document.addEventListener('click', (event) => {
-  if (!header.contains(event.target)) closeMenu();
-});
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && header.classList.contains('is-menu-open')) {
-    closeMenu();
-    toggle.focus();
-  }
-});
-header.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+import './header-menu.js';
 
 const tocLinks = [...document.querySelectorAll('.article-toc a')];
 if (tocLinks.length && 'IntersectionObserver' in window) {

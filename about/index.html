@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
   <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MT0GQPDPR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9MT0GQPDPR');
+  </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Ros Veluz | Graphic, Web and UI/UX Designer</title>
@@ -20,16 +28,15 @@
   <body class="blog-page about-page">
     <a class="skip-link" href="#about-main">Skip to content</a>
     <header class="site-header blog-header" data-header>
-      <a class="brand" href="/#home" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
-      <nav class="desktop-nav" aria-label="Main navigation">
-        <a class="blog-nav-link" href="/#home">Work</a>
-        <a class="blog-nav-link" href="/about/" aria-current="page">About</a>
-      </nav>
-      <button class="mobile-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="blog-mobile-nav" data-menu-toggle><span></span><span></span><span></span></button>
-      <a class="contact-button" href="/#contact" aria-label="Open contact page"><img src="/img/envelope.svg" alt="" /></a>
-      <nav class="mobile-nav" id="blog-mobile-nav" aria-label="Mobile navigation" data-mobile-nav>
-        <a href="/#home">Work</a>
-        <a href="/about/" aria-current="page">About</a>
+      <a class="brand" href="/" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
+      <button class="nav-pill header-menu-toggle" type="button" aria-expanded="false" aria-controls="site-page-menu" data-page-menu-toggle>MENU</button>
+      <nav class="header-page-menu" id="site-page-menu" aria-label="Page navigation" hidden>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/service/">Services</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
       </nav>
     </header>
 
@@ -60,7 +67,7 @@
             <p>I still have an ambitious creative streak, including the old dream of making something worthy of a museum wall. For now, I'm glad to put that curiosity to work on useful, thoughtful design.</p>
           </section>
 
-          <p class="about-links"><a href="/#home">Explore my work</a><a href="/blog/">Read my notes</a><a href="/#contact">Get in touch</a></p>
+          <p class="about-links"><a href="/">Explore my work</a><a href="/blog/">Read my notes</a><a href="/contact/">Get in touch</a></p>
         </div>
       </div>
     </main>
@@ -68,7 +75,7 @@
     <footer class="site-footer">
       <div class="footer-links">
         <a href="/about/" aria-current="page">About</a>
-        <a href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
+        <a href="/service/">Services</a>
       </div>
       <div class="footer-links">
         <a href="/blog/">Blog</a>
@@ -78,7 +85,7 @@
         <a href="#" aria-label="LinkedIn"><img src="/img/linkedin.svg" alt="" /></a>
         <a href="#" aria-label="Instagram"><img src="/img/instagram.svg" alt="" /></a>
         <a href="#" aria-label="Facebook"><img src="/img/facebook.svg" alt="" /></a>
-        <a class="mini-envelope" href="/#contact" aria-label="Contact"><img src="/img/envelope.svg" alt="" /></a>
+        <a class="mini-envelope" href="/contact/" aria-label="Contact"><img src="/img/envelope.svg" alt="" /></a>
       </div>
     </footer>
   </body>

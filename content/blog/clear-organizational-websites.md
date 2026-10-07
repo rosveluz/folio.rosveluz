@@ -37,7 +37,7 @@ Before designing page layouts, I would list the main reasons people need the web
 
 Not every organization needs every section. The important decision is what deserves a clear destination, rather than placing everything into a long homepage.
 
-In my [Eiger website design work](/#work/eiger-websites), owner relations, company growth, and leadership have distinct treatments. They illustrate different communication tasks within related company websites, not a template that every organization should copy.
+In my [Eiger website design work](/work/eiger-websites/), owner relations, company growth, and leadership have distinct treatments. They illustrate different communication tasks within related company websites, not a template that every organization should copy.
 
 ## Make Documents Part of the Experience
 
@@ -59,4 +59,4 @@ My preferred starting brief would identify the audiences, their main questions, 
 
 For organizations considering a website project, that is a useful first conversation: not just what the site should look like, but what it needs to communicate.
 
-[Get in touch about your organization's website](/#contact).
+[Get in touch about your organization's website](/contact/).

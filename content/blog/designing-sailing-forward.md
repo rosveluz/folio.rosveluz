@@ -60,4 +60,4 @@ Looking across these editions, the work represents sustained involvement in an e
 
 That is the kind of work I want to continue doing for businesses, trade unions, and organizations. Websites, publications, and supporting brand materials can each contribute to a clear and considered public presence.
 
-[View more Sailing Forward covers and interior spreads](/#work/sailing-forward-amosup).
+[View more Sailing Forward covers and interior spreads](/work/sailing-forward-amosup/).

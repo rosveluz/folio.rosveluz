@@ -36,13 +36,18 @@ async function validateAssets(post, projectRoot) {
 }
 
 function header() {
-  return `<header class="site-header blog-header" data-header>
-    <a class="brand" href="/#home" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/#home">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
-    <button class="mobile-menu-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="blog-mobile-nav" data-menu-toggle><span></span><span></span><span></span></button>
-    <a class="contact-button" href="/#contact" aria-label="Open contact page"><img src="/img/envelope.svg" alt="" /></a>
-    <nav class="mobile-nav" id="blog-mobile-nav" aria-label="Mobile navigation" data-mobile-nav><a href="/#home">Work</a><a href="/about/">About</a></nav>
-  </header>`;
+  return `    <header class="site-header blog-header" data-header>
+      <a class="brand" href="/" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
+      <button class="nav-pill header-menu-toggle" type="button" aria-expanded="false" aria-controls="site-page-menu" data-page-menu-toggle>MENU</button>
+      <nav class="header-page-menu" id="site-page-menu" aria-label="Page navigation" hidden>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/service/">Services</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </header>`;
 }
 
 function page({ title, description, url, image, content, footer, preview, post }) {
@@ -54,6 +59,14 @@ function page({ title, description, url, image, content, footer, preview, post }
     }).replace(/</g, '\\u003c')}</script>` : '';
   return `<!doctype html>
 <html lang="en"><head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MT0GQPDPR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9MT0GQPDPR');
+  </script>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${esc(title)} | Rosveluz</title><meta name="description" content="${esc(description)}" />
   <link rel="canonical" href="${origin}${url}" />
@@ -117,7 +130,7 @@ export async function buildBlog({ preview = false, projectRoot = root } = {}) {
   const index = await readFile(path.join(root, 'index.html'), 'utf8');
   let footer = index.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)?.[0];
   if (!footer) throw new Error('Could not find the existing site footer');
-  footer = footer.replace(/src="img\//g, 'src="/img/').replace(/href="#contact"/g, 'href="/#contact"');
+  footer = footer.replace(/src="img\//g, 'src="/img/');
   if (published) footer = footer.replace('<span data-blog-link aria-disabled="true">Blog</span>', '<a href="/blog/">Blog</a>');
   const blogDirectory = path.join(outputRoot, 'blog');
   const oldManifest = JSON.parse(await readFile(path.join(outputRoot, 'data', 'blog-status.json'), 'utf8').catch(() => '{"slugs":[]}'));

@@ -1,16 +1,34 @@
 <!doctype html>
 <html lang="en">
   <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MT0GQPDPR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9MT0GQPDPR');
+  </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="iCDcmkRkFsrDB-fbPz7WIs4VEVazEyUDIhSzmZiZvAk" />
+    <!-- seo:start -->
     <title>Ros Veluz | Web, UI/UX &amp; Graphic Design Portfolio</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
+    <meta name="description" content="Explore Ros Veluz&#39;s portfolio of web design, UI/UX, branding, graphics and desktop publishing projects." />
+    <link rel="canonical" href="https://folio.rosveluz.com/" />
+    <meta property="og:title" content="Ros Veluz | Web, UI/UX &amp; Graphic Design Portfolio" />
+    <meta property="og:description" content="Explore Ros Veluz&#39;s portfolio of web design, UI/UX, branding, graphics and desktop publishing projects." />
+    <meta property="og:url" content="https://folio.rosveluz.com/" />
+    <meta property="og:type" content="website" />
+
+    <!-- seo:end -->
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/script.js"></script>
+    <script type="module" src="/header-menu.js"></script>
   </head>
   <body>
     <header class="site-header" data-header>
-      <a class="brand" href="#home" aria-label="Rosveluz home"><img src="img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
+      <a class="brand" href="/" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
 
       <nav class="desktop-nav" aria-label="Project categories">
         <button class="nav-pill is-active" type="button" data-filter="All">All</button>
@@ -20,7 +38,7 @@
         <button class="nav-pill" type="button" data-filter="Graphics">Graphics</button>
         <button class="nav-pill" type="button" data-filter="Desktop Publishing">Desktop Publishing</button>
         <button class="filter-button" type="button" aria-label="Open sorting and filters" aria-expanded="false" data-filter-toggle>
-          <img src="img/filter.svg" alt="" />
+          <img src="/img/filter.svg" alt="" />
         </button>
       </nav>
 
@@ -30,15 +48,20 @@
         <span></span>
       </button>
 
-      <a class="contact-button" href="#contact" aria-label="Open contact page">
-        <img src="img/envelope.svg" alt="" />
-      </a>
+      <button class="nav-pill header-menu-toggle" type="button" aria-expanded="false" aria-controls="site-page-menu" data-page-menu-toggle>MENU</button>
+      <nav class="header-page-menu" id="site-page-menu" aria-label="Page navigation" hidden>
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/service/">Services</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+      </nav>
 
       <nav class="mobile-nav" aria-label="Mobile project categories" data-mobile-nav>
         <div class="mobile-nav-row">
           <button class="nav-pill is-active" type="button" data-filter="All">All</button>
           <button class="filter-button mobile-filter-button" type="button" aria-label="Open sorting and filters" aria-expanded="false" data-filter-toggle>
-            <img src="img/filter.svg" alt="" />
+            <img src="/img/filter.svg" alt="" />
           </button>
         </div>
         <button class="nav-pill" type="button" data-filter="Web Design">Web Design</button>
@@ -49,22 +72,134 @@
       </nav>
     </header>
 
-    <main id="app" class="site-main" tabindex="-1"></main>
+    <main id="app" class="site-main home-view" tabindex="-1"><h1 class="visually-hidden">Ros Veluz design portfolio</h1><section class="work-grid" aria-label="Portfolio work">
+    <article class="work-card">
+      <a class="work-card-button" href="/work/permitedge-dashboard-permit-overview/">
+        <img src="/img/projects/permitedge/01-dashboard-permit-overview/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">PermitEdge — Dashboard / Permit Overview</span>
+        <span class="work-detail">Set 01 · Interface design</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/permitedge-monitoring-gas-testing/">
+        <img src="/img/projects/permitedge/02-monitoring-gas-testing/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">PermitEdge — Monitoring &amp; Gas Testing</span>
+        <span class="work-detail">Set 02 · Interface design</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/permitedge-active-work-details/">
+        <img src="/img/projects/permitedge/03-active-work-details/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">PermitEdge — Active Work Details</span>
+        <span class="work-detail">Set 03 · Interface design</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/permitedge-personnel-entry-exit/">
+        <img src="/img/projects/permitedge/04-personnel-entry-exit/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">PermitEdge — Personnel Entry / Exit</span>
+        <span class="work-detail">Set 04 · Interface design</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/selah-website/">
+        <img src="/img/projects/selah-website/selah-website_cover.png" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Selah Website</span>
+        <span class="work-detail">Responsive website design for Selah</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/selah-logo/">
+        <img src="/img/projects/selah-logo/selah-logo_cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Selah Logo</span>
+        <span class="work-detail">Brand Identity design for Selah</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/eiger-websites/">
+        <img src="/img/projects/eiger-websites/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Eiger Websites</span>
+        <span class="work-detail">Website design for Eiger Operating and Eiger Resources</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/sailing-forward-amosup/">
+        <img src="/img/projects/sailing-forward/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Sailing Forward</span>
+        <span class="work-detail">Quarterly Newsletter by AMOSUP | June 2013 - March 2023</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/brochures-and-leaflets/">
+        <img src="/img/projects/brochures-and-leaflets/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Brochures &amp; Leaflets</span>
+        <span class="work-detail">Selected print and editorial design | Approx. 2013 - 2021</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/logo-designs-2019-2020/">
+        <img src="/img/projects/logo-designs-2019-2020/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Logo Designs - 2019-2020</span>
+        <span class="work-detail">Property Empire, System for Online Sellers, FBA Deal Source, Webinar and Online Learning Products for Systems and Outsourcing</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/animation-and-website-motion-graphics/">
+        <img src="/img/projects/animation-and-website-motion-graphics/flymail-envelope.gif" alt="" loading="lazy" class="" style="object-position: center 72%" />
+        <span class="work-title">Animation and Website Motion Graphics</span>
+        <span class="work-detail">FBA Deal Source Product Explainer Video and Systems for Outsourcing Website Graphics</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/social-and-motion-graphics/">
+        <img src="/img/projects/social-and-motion-graphics/sos-webinar_banner.gif" alt="" loading="lazy" class="is-contained" style="--media-background: #7bb3e3" />
+        <span class="work-title">Social &amp; Motion Graphics</span>
+        <span class="work-detail">Animated campaigns and social content | 2016 - 2019</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/logo-designs-2015-2017/">
+        <img src="/img/projects/logo-designs-2015-2017/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Logo Designs - 2015-2017</span>
+        <span class="work-detail">Assorted Logo Designs for the clients of PointB Education</span>
+      </a>
+    </article>
+
+    <article class="work-card">
+      <a class="work-card-button" href="/work/logo-designs-2018/">
+        <img src="/img/projects/logo-designs-2018/cover.webp" alt="" loading="lazy" class="" style="" />
+        <span class="work-title">Logo Designs - 2018</span>
+        <span class="work-detail">Systematic Business Marketing, Automatic IT Marketing, Marketing Medic, Saratosa Web Marketing, Sarasota Pro Headshots</span>
+      </a>
+    </article>
+  </section></main>
 
     <footer class="site-footer">
       <div class="footer-links">
         <a href="/about/">About</a>
-        <a href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>
+        <a href="/service/">Services</a>
       </div>
       <div class="footer-links">
         <span data-blog-link aria-disabled="true">Blog</span>
         <a href="https://art.rosveluz.com/" target="_blank" rel="noopener noreferrer">art.rosveluz.com</a>
       </div>
       <div class="social-links" aria-label="Social links">
-        <a href="#" aria-label="LinkedIn"><img src="img/linkedin.svg" alt="" /></a>
-        <a href="#" aria-label="Instagram"><img src="img/instagram.svg" alt="" /></a>
-        <a href="#" aria-label="Facebook"><img src="img/facebook.svg" alt="" /></a>
-        <a class="mini-envelope" href="#contact" aria-label="Contact"><img src="img/envelope.svg" alt="" /></a>
+        <a href="#" aria-label="LinkedIn"><img src="/img/linkedin.svg" alt="" /></a>
+        <a href="#" aria-label="Instagram"><img src="/img/instagram.svg" alt="" /></a>
+        <a href="#" aria-label="Facebook"><img src="/img/facebook.svg" alt="" /></a>
+        <a class="mini-envelope" href="/contact/" aria-label="Contact"><img src="/img/envelope.svg" alt="" /></a>
       </div>
     </footer>
   </body>

@@ -58,7 +58,11 @@ test('production excludes samples and drafts, adds metadata, enables Blog, and r
     assert.match(html, /og:image/);
     assert.match(html, /href="\/blog\/">Blog/);
     assert.match(html, /class="blog-nav-link" href="\/about\/">About/);
-    assert.match(html, /<a href="\/about\/">About<\/a><\/nav>/);
+    assert.match(html, /aria-controls="site-page-menu" data-page-menu-toggle>MENU<\/button>/);
+    assert.match(html, /id="site-page-menu" aria-label="Page navigation" hidden/);
+    for (const [url, label] of [['/', 'Home'], ['/about/', 'About'], ['/service/', 'Services'], ['/blog/', 'Blog'], ['/contact/', 'Contact']]) {
+      assert.ok(html.includes(`<a href="${url}">${label}</a>`));
+    }
     assert.doesNotMatch(html, /noindex/);
     const preview = await buildBlog({ projectRoot: fixture, preview: true });
     assert.equal(preview.posts.length, 3);
