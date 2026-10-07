@@ -32,10 +32,12 @@ test('site build produces linked HTML project and contact pages with unique meta
     assert.match(contact, /mailto:hello@rosveluz.com/);
     assert.match(contact, /<footer[\s\S]*mailto:hello@rosveluz.com/);
     assert.doesNotMatch(contact, /contact-email|contact-links|art\.rosveluz\.com|www\.rosveluz\.com/);
-    assert.match(home, /https:\/\/art\.rosveluz\.com\//);
     assert.doesNotMatch(contact, /mailto:rosveluz@gmail.com/);
     assert.match(contact, /<title>Contact Ros Veluz/);
     for (const html of [home, page, contact]) {
+      const footer = html.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)[0];
+      assert.match(footer, /href="mailto:hello@rosveluz.com">hello@rosveluz.com/);
+      assert.doesNotMatch(footer, /art\.rosveluz\.com|mini-envelope|envelope\.svg/);
       assert.match(html, /rel="icon" type="image\/svg\+xml" sizes="any" href="\/img\/favicon\.svg\?v=2"/);
     }
     const sitemap = await readFile(path.join(fixture, 'sitemap.xml'), 'utf8');
