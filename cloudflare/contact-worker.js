@@ -1,4 +1,5 @@
 const services = new Set(['Web design', 'UI/UX design', 'App Prototyping', 'Logo and visual identity', 'Graphic design', 'Desktop publishing', 'Other']);
+const verificationErrorCodes = new Set(['missing-input-secret', 'invalid-input-secret', 'missing-input-response', 'invalid-input-response', 'bad-request', 'timeout-or-duplicate', 'internal-error']);
 
 async function notifyEnquiry(env, lead) {
   if (!env.BREVO_API_KEY) {
@@ -90,6 +91,8 @@ export default {
       if (!result.success || result.hostname !== new URL(env.ALLOWED_ORIGIN).hostname || result.action !== 'contact') {
         return reply({ error: 'Verification expired or failed. Please try again.' }, 400, {
           verificationSucceeded: result.success === true,
+          errorCodes: Array.isArray(result['error-codes'])
+            ? result['error-codes'].slice(0, 10).map((code) => verificationErrorCodes.has(code) ? code : 'unknown-error') : [],
           hostnameMatches: result.hostname === new URL(env.ALLOWED_ORIGIN).hostname,
           actionMatches: result.action === 'contact',
         });

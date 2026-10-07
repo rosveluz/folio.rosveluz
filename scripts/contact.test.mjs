@@ -112,6 +112,31 @@ test('rejection diagnostics identify invalid fields without logging submitted va
   }
 });
 
+test('verification diagnostics log only known error codes and never save rejected enquiries', async () => {
+  const originalFetch = globalThis.fetch, originalWarn = console.warn;
+  const logs = [];
+  console.warn = (...values) => logs.push(values);
+  const env = { ALLOWED_ORIGIN: origin, TURNSTILE_SECRET: 'private-secret', DB: { prepare() { assert.fail('Rejected verification must not save a lead'); } } };
+  try {
+    for (const codes of [['invalid-input-secret'], ['timeout-or-duplicate'], ['invalid-input-response', 'private-provider-data'], 'private-provider-data']) {
+      globalThis.fetch = async () => Response.json({ success: false, 'error-codes': codes });
+      const response = await worker.fetch(request(), env);
+      assert.equal(response.status, 400);
+      assert.deepEqual(await response.json(), { error: 'Verification expired or failed. Please try again.' });
+    }
+    assert.deepEqual(logs.map(([, details]) => details.errorCodes), [
+      ['invalid-input-secret'], ['timeout-or-duplicate'], ['invalid-input-response', 'unknown-error'], [],
+    ]);
+    const logText = JSON.stringify(logs);
+    for (const sensitive of [payload.turnstileToken, payload.email, 'private-secret', 'private-provider-data']) {
+      assert.ok(!logText.includes(sensitive));
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+    console.warn = originalWarn;
+  }
+});
+
 test('only verified contact tokens save a parameterized lead; database failures do not report success', async () => {
   const originalFetch = globalThis.fetch;
   const originalCrypto = globalThis.crypto;
