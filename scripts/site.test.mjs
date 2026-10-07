@@ -59,6 +59,10 @@ test('favicon adapts to dark mode without changing the header logo', async () =>
 
 test('routing forwards legacy links and renders real project and contact paths', async () => {
   const source = await readFile(path.join(root, 'script.js'), 'utf8');
+  const styles = await readFile(path.join(root, 'styles.css'), 'utf8');
+  assert.match(source, /app\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(styles, /\.site-main\.detail-view:focus\s*\{\s*outline: none;/);
+  assert.match(styles, /\.header-page-menu a:focus-visible\s*\{\s*outline: 2px solid/);
   const route = source.slice(source.indexOf('function route()'));
   for (const [hash, pathname, expected] of [
     ['#work/sample-project', '/', '/work/sample-project/'],

@@ -221,6 +221,10 @@ video {
   margin: 0 auto;
 }
 
+.site-main.detail-view:focus {
+  outline: none;
+}
+
 .work-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
