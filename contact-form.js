@@ -46,6 +46,7 @@ export async function initContactForm(form) {
   let widget;
   let submitting = false;
   let completed = false;
+  let submissionError = false;
   let verificationTimer;
   const waitForVerification = () => {
     clearTimeout(verificationTimer);
@@ -60,6 +61,7 @@ export async function initContactForm(form) {
     event.preventDefault();
     if (submitting || completed || !token || !form.reportValidity()) return;
     submitting = true;
+    submissionError = false;
     button.disabled = true;
     button.textContent = 'Sending...';
     status.textContent = '';
@@ -79,6 +81,7 @@ export async function initContactForm(form) {
       form.reset();
       try { window.gtag?.('event', 'generate_lead', { service: payload.service }); } catch { /* Analytics must not interrupt confirmation. */ }
     } catch (error) {
+      submissionError = true;
       status.textContent = error.name === 'TimeoutError' ? 'The request timed out. Please email me if you are unsure it was received.' : (error.message === 'Failed to fetch' ? 'Unable to connect. Please try again or email me directly.' : error.message);
       button.textContent = 'Send enquiry';
     } finally {
@@ -98,7 +101,7 @@ export async function initContactForm(form) {
     waitForVerification();
     widget = turnstile.render(form.querySelector('[data-turnstile]'), {
       sitekey, action: 'contact', size: 'flexible',
-      callback(value) { clearTimeout(verificationTimer); token = value; button.disabled = submitting || completed; if (!submitting && !completed) status.textContent = ''; },
+      callback(value) { clearTimeout(verificationTimer); token = value; button.disabled = submitting || completed; if (!submitting && !completed && !submissionError) status.textContent = ''; },
       'expired-callback'() { token = ''; button.disabled = true; status.textContent = 'Verification expired. Verifying again...'; waitForVerification(); },
       'error-callback'(code) {
         clearTimeout(verificationTimer);

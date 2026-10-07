@@ -36,6 +36,8 @@ test('form records a lead event only after acceptance and prevents duplicate sub
   assert.equal(status.textContent, 'Please try again.');
   accepted = true;
   callbacks.callback('new-token');
+  assert.equal(status.textContent, 'Please try again.');
+  assert.equal(button.disabled, false);
   await submit({ preventDefault() {} });
   assert.equal(analytics, 1);
   assert.equal(button.textContent, 'Enquiry sent');
