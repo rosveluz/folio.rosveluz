@@ -17,6 +17,7 @@ test('form records a lead event only after acceptance and prevents duplicate sub
   const button = { disabled: true }, status = { textContent: '' };
   const form = {
     isConnected: true, reset() {}, reportValidity: () => true,
+    querySelectorAll: () => [],
     querySelector: (selector) => selector === '[type="submit"]' ? button : selector === '[data-contact-status]' ? status : {},
     addEventListener(event, handler) { if (event === 'submit') submit = handler; },
   };
@@ -45,6 +46,48 @@ test('form records a lead event only after acceptance and prevents duplicate sub
   assert.equal(requests, 2);
 });
 
+test('field validation blocks blank names, invalid emails, and short trimmed messages before sending', async () => {
+  const source = await readFile(new URL('../contact-form.js', import.meta.url), 'utf8');
+  let submit, callbacks, requests = 0;
+  const fields = ['name', 'email', 'message'].map((name) => ({
+    name, value: payload[name], required: true, validity: { typeMismatch: false }, error: '', handlers: {},
+    setCustomValidity(message) { this.error = message; },
+    addEventListener(event, handler) { this.handlers[event] = handler; },
+  }));
+  const button = { disabled: true }, status = { textContent: '' };
+  const form = {
+    isConnected: true, reset() {}, reportValidity: () => fields.every((field) => !field.error),
+    querySelectorAll: () => fields,
+    querySelector: (selector) => selector === '[type="submit"]' ? button : selector === '[data-contact-status]' ? status : {},
+    addEventListener(event, handler) { if (event === 'submit') submit = handler; },
+  };
+  const context = vm.createContext({
+    window: { turnstile: { ready(callback) { callback(); }, render(element, options) { callbacks = options; return 1; }, reset() {} } },
+    location: { search: '', pathname: '/contact/' }, sessionStorage: { getItem: () => '{}' },
+    URLSearchParams, AbortSignal, setTimeout: () => 1, clearTimeout() {}, form,
+    FormData: class { [Symbol.iterator]() { return fields.map((field) => [field.name, field.value])[Symbol.iterator](); } },
+    fetch: async () => { requests++; return { ok: true, json: async () => ({ success: true }) }; },
+  });
+  vm.runInContext(source.replace('export async function', 'async function'), context);
+  await vm.runInContext('initContactForm(form)', context);
+  callbacks.callback('verified-token');
+  for (const [index, value, expected] of [[0, '', /name/], [0, '   ', /name/], [1, '', /email address/], [1, 'not-an-email', /valid email/], [1, 'person@localhost', /valid email/], [2, '  short  ', /10 characters/]]) {
+    fields[index].value = value;
+    fields[index].handlers.input();
+    assert.match(fields[index].error, expected);
+    await submit({ preventDefault() {} });
+    assert.equal(requests, 0);
+    fields[index].value = payload[fields[index].name];
+    fields[index].handlers.input();
+    assert.equal(fields[index].error, '');
+  }
+  fields[0].value = "Jean-Luc O'Neill";
+  fields[0].handlers.blur();
+  assert.equal(fields[0].error, '');
+  await submit({ preventDefault() {} });
+  assert.equal(requests, 1);
+});
+
 test('verification reports stalled script loading and stalled challenges without enabling submission', async () => {
   const source = await readFile(new URL('../contact-form.js', import.meta.url), 'utf8');
   for (const scriptReady of [false, true]) {
@@ -53,6 +96,7 @@ test('verification reports stalled script loading and stalled challenges without
     const button = { disabled: true }, status = { textContent: 'Loading verification...' };
     const form = {
       isConnected: true,
+      querySelectorAll: () => [],
       querySelector: (selector) => selector === '[type="submit"]' ? button : selector === '[data-contact-status]' ? status : {},
       addEventListener() {},
     };

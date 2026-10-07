@@ -33,6 +33,7 @@ export async function buildSite({ projectRoot = root, portfolio = projects, incl
     ${image ? `<meta property="og:image" content="${esc(new URL(image, origin + '/').href)}" />` : ''}
     <!-- seo:end -->`;
     return template
+      .replace('<a href="https://art.rosveluz.com/" target="_blank" rel="noopener noreferrer">art.rosveluz.com</a>', url === '/contact/' ? '<a href="mailto:hello@rosveluz.com">hello@rosveluz.com</a>' : '<a href="https://art.rosveluz.com/" target="_blank" rel="noopener noreferrer">art.rosveluz.com</a>')
       .replace('</head>', url === '/contact/' ? '    <link rel="preconnect" href="https://challenges.cloudflare.com" />\n  </head>' : '</head>')
       .replace(/<header class="site-header[^"]*" data-header>[\s\S]*?<\/header>/, (header) => url === '/' ? header : renderInnerHeader())
       .replace(/<!-- seo:start -->[\s\S]*?<!-- seo:end -->/, metadata)

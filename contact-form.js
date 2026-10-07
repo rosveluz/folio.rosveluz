@@ -42,6 +42,24 @@ export async function initContactForm(form) {
   if (!form) return;
   const button = form.querySelector('[type="submit"]');
   const status = form.querySelector('[data-contact-status]');
+  const fields = [...form.querySelectorAll('input[name], select[name], textarea[name]')];
+  const validateField = (field) => {
+    const value = field.value.trim();
+    let error = '';
+    if (field.required && !value) {
+      error = ({ name: 'Please enter your name.', email: 'Please enter your email address.', country: 'Please enter your country.', service: 'Please select a service.', message: 'Please describe your project.' })[field.name] || 'Please complete this field.';
+    } else if (field.name === 'email' && value && (field.validity.typeMismatch || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))) {
+      error = 'Please enter a valid email address, such as name@example.com.';
+    } else if (field.name === 'message' && value && value.length < 10) {
+      error = 'Please enter at least 10 characters about your project.';
+    }
+    field.setCustomValidity(error);
+  };
+  for (const field of fields) {
+    field.addEventListener('input', () => validateField(field));
+    field.addEventListener('blur', () => validateField(field));
+    validateField(field);
+  }
   let token = '';
   let widget;
   let submitting = false;
@@ -59,6 +77,7 @@ export async function initContactForm(form) {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    fields.forEach(validateField);
     if (submitting || completed || !token || !form.reportValidity()) return;
     submitting = true;
     submissionError = false;
