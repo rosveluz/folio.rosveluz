@@ -2,6 +2,42 @@ export const categories = ["All", "Web Design", "UIUX", "Logo Design", "Graphics
 
 export const projects = [
   {
+    id: "artklatan-logo",
+    title: "Artklatan Logo",
+    detail: "Logo identity for a community-based art library",
+    category: "Logo Design",
+    date: "2022-06-01",
+    description: "Community-based art library. A place to read, create/make and share knowledge and creative skills.",
+    cover: "img/projects/artklatan-logo/cover.webp",
+    images: [
+      {
+        desktopSrc: "img/projects/artklatan-logo/Artboard2.webp",
+        mobileSrc: "img/projects/artklatan-logo/Artboard10.webp",
+        caption: "Artklatan logo combining an open book, an easel and a paintbrush.",
+      },
+      {
+        desktopSrc: "img/projects/artklatan-logo/Artboard3.webp",
+        mobileSrc: "img/projects/artklatan-logo/Artboard11.webp",
+        caption: "Hanging sign mockup for the community art library.",
+      },
+      {
+        desktopSrc: "img/projects/artklatan-logo/Artboard4.webp",
+        mobileSrc: "img/projects/artklatan-logo/Artboard12.webp",
+        caption: "Wooden wall sign mockup featuring the Artklatan identity.",
+      },
+      {
+        desktopSrc: "img/projects/artklatan-logo/Artboard5.webp",
+        mobileSrc: "img/projects/artklatan-logo/Artboard13.webp",
+        caption: "Canvas tote bag and bookmark mockups in the green brand palette.",
+      },
+      {
+        desktopSrc: "img/projects/artklatan-logo/Artboard6.webp",
+        mobileSrc: "img/projects/artklatan-logo/Artboard14.webp",
+        caption: "Membership card and illustrated bookmark mockups.",
+      },
+    ],
+  },
+  {
     id: "ano-sayo-kitchen-logo-design",
     title: "Ano Sayo Kitchen Logo Design",
     detail: "Logo identity and packaging for Ano Sayo Kitchen",
