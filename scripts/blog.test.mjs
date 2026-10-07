@@ -57,7 +57,9 @@ test('production excludes samples and drafts, adds metadata, enables Blog, and r
     assert.match(html, /rel="canonical"/);
     assert.match(html, /og:image/);
     assert.match(html, /href="\/blog\/">Blog/);
-    assert.match(html, /class="blog-nav-link" href="\/about\/">About/);
+    const header = html.match(/<header class="site-header[\s\S]*?<\/header>/)[0];
+    assert.match(header, /class="brand" href="\/"/);
+    assert.doesNotMatch(header, /class="desktop-nav"|data-filter/);
     assert.match(html, /aria-controls="site-page-menu" data-page-menu-toggle>MENU<\/button>/);
     assert.match(html, /id="site-page-menu" aria-label="Page navigation" hidden/);
     for (const [url, label] of [['/', 'Home'], ['/about/', 'About'], ['/service/', 'Services'], ['/blog/', 'Blog'], ['/contact/', 'Contact']]) {

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { projects } from '../data/projects.js';
 import { escapeHtml as esc, renderCards, renderProject, renderContactContent } from '../portfolio-render.js';
 import { buildBlog, root } from './build-blog.mjs';
+import { renderInnerHeader } from './site-header.mjs';
 
 const origin = 'https://folio.rosveluz.com';
 
@@ -32,6 +33,7 @@ export async function buildSite({ projectRoot = root, portfolio = projects, incl
     ${image ? `<meta property="og:image" content="${esc(new URL(image, origin + '/').href)}" />` : ''}
     <!-- seo:end -->`;
     return template
+      .replace(/<header class="site-header[^"]*" data-header>[\s\S]*?<\/header>/, (header) => url === '/' ? header : renderInnerHeader())
       .replace(/<!-- seo:start -->[\s\S]*?<!-- seo:end -->/, metadata)
       .replace(/<main id="app"[\s\S]*?<\/main>/, `<main id="app" class="site-main ${className}" tabindex="-1">${content}</main>`)
       .replaceAll('src="img/', 'src="/img/')

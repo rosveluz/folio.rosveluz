@@ -2,6 +2,7 @@ import { mkdir, readdir, readFile, writeFile, rm, stat } from 'node:fs/promises'
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { escapeHtml as esc, parsePost, renderMarkdown } from './blog-content.mjs';
+import { renderInnerHeader } from './site-header.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const origin = 'https://folio.rosveluz.com';
@@ -35,20 +36,6 @@ async function validateAssets(post, projectRoot) {
   }
 }
 
-function header() {
-  return `    <header class="site-header blog-header" data-header>
-      <a class="brand" href="/" aria-label="Rosveluz home"><img src="/img/rvz-blk.svg" alt="Rosveluz Logo" /></a>
-      <nav class="desktop-nav" aria-label="Main navigation"><a class="blog-nav-link" href="/">Work</a><a class="blog-nav-link" href="/about/">About</a></nav>
-      <button class="nav-pill header-menu-toggle" type="button" aria-expanded="false" aria-controls="site-page-menu" data-page-menu-toggle>MENU</button>
-      <nav class="header-page-menu" id="site-page-menu" aria-label="Page navigation" hidden>
-        <a href="/">Home</a>
-        <a href="/about/">About</a>
-        <a href="/service/">Services</a>
-        <a href="/blog/">Blog</a>
-        <a href="/contact/">Contact</a>
-      </nav>
-    </header>`;
-}
 
 function page({ title, description, url, image, content, footer, preview, post }) {
   const metadata = post ? `<meta property="article:published_time" content="${esc(post.date)}" />
@@ -79,7 +66,7 @@ function page({ title, description, url, image, content, footer, preview, post }
   <script type="module" src="/blog.js"></script>
 </head><body class="blog-page">
   <a class="skip-link" href="#blog-main">Skip to content</a>
-  ${header()}
+  ${renderInnerHeader()}
   <main class="site-main blog-main" id="blog-main" tabindex="-1">${content}</main>
   ${footer}
 </body></html>\n`;
